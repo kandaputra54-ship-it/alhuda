@@ -1,65 +1,198 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { El_Messiri } from 'next/font/google';
+import { getPrayerTimes } from '@/lib/prayerTimes';
+import { weeklySchedule } from '@/lib/weeklySchedule'; 
+import { isSameMinute } from 'date-fns';
+
+// Import Komponen
+import { BackgroundGradient } from '@/components/BackgroundGradient';
+import { Header } from '@/components/Header';
+import { PrayerCard } from '@/components/PrayerCard';
+import { MarqueeFooter } from '@/components/MarqueeFooter';
+import { AdzanOverlay } from '@/components/AdzanOverlay';
+import { IqomahOverlay } from '@/components/IqomahOverlay'; 
+import { ImamOverlay } from '@/components/ImamOverlay';
+
+const elMessiri = El_Messiri({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-el-messiri',
+});
 
 export default function Home() {
+  // --- STATE UTAMA ---
+  const [now, setNow] = useState(new Date());
+  const [prayerTimes, setPrayerTimes] = useState<any>(null);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const lastTriggeredPrayer = useRef<string | null>(null);
+
+  // --- STATE OVERLAY ---
+  const [adzanActive, setAdzanActive] = useState({ isVisible: false, image: '' });
+  const [iqomahActive, setIqomahActive] = useState({ isVisible: false, duration: 10, label: '' });
+  const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
+
+  // --- KONFIGURASI DURASI TESTING ---
+  const ADZAN_IMAGE_DURATION = 300 * 1000; // 10 Detik Foto Adzan
+  const IMAM_INFO_DURATION = 15 * 1000;   // 20 Detik Info Imam
+
+  // --- FUNGSI UNLOCK AUDIO ---
+  const unlockAudio = () => {
+    if (!audioEnabled) {
+      setAudioEnabled(true);
+      console.log("Audio Unlocked");
+    }
+  };
+
+  // --- FUNGSI TRANSISI 3: IQOMAH SELESAI -> INFO IMAM ---
+  const handleIqomahFinished = useCallback(() => {
+    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const d = new Date();
+    const currentDay = dayNames[d.getDay()];
+    const todaySchedule: any = weeklySchedule[currentDay];
+    
+    const prayerKey = iqomahActive.label.toLowerCase();
+    const imamData = todaySchedule[prayerKey];
+
+    // Tutup Iqomah, Buka Imam
+    setIqomahActive(prev => ({ ...prev, isVisible: false }));
+    setImamActive({
+      isVisible: true,
+      label: iqomahActive.label,
+      utama: imamData?.utama || 'Petugas',
+      badal: imamData?.badal || '-'
+    });
+
+    // Tutup Imam secara otomatis setelah durasi selesai
+    setTimeout(() => {
+      setImamActive(prev => ({ ...prev, isVisible: false }));
+    }, IMAM_INFO_DURATION);
+  }, [iqomahActive.label]);
+
+  // --- FUNGSI TRANSISI 1 & 2: CEK WAKTU ADZAN -> FOTO -> IQOMAH ---
+  const checkTransitions = (currentTime: Date, times: any) => {
+    const schedules = [
+      { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 12 },
+      { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 12 },
+      { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
+      { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
+      { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10}, // 10 Detik Testing
+    ];
+
+    schedules.forEach((entry) => {
+      if (isSameMinute(currentTime, entry.time) && lastTriggeredPrayer.current !== entry.label) {
+        lastTriggeredPrayer.current = entry.label;
+
+        // 1. Munculkan Foto Adzan
+        setAdzanActive({ isVisible: true, image: entry.img });
+
+        // 2. Tunggu durasi foto, lalu pindah ke Iqomah
+        setTimeout(() => {
+          setAdzanActive({ isVisible: false, image: '' });
+          setIqomahActive({ 
+            isVisible: true, 
+            duration: entry.iqomah, 
+            label: entry.label 
+          });
+        }, ADZAN_IMAGE_DURATION);
+      }
+    });
+  };
+
+  // --- TIMER UTAMA (HEARTBEAT) ---
+  useEffect(() => {
+    const initialTimes = getPrayerTimes(new Date());
+    setPrayerTimes(initialTimes);
+
+    const timer = setInterval(() => {
+      const d = new Date();
+      setNow(d);
+      
+      const currentTimes = getPrayerTimes(d);
+      checkTransitions(d, currentTimes);
+
+      // Refresh jadwal di UI setiap menit ke-0
+      if (d.getSeconds() === 0) {
+        setPrayerTimes(currentTimes);
+        if (d.getHours() === 0 && d.getMinutes() === 0) {
+          lastTriggeredPrayer.current = null;
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!prayerTimes) return <div className="bg-[#1a204d] h-screen" />;
+
+  const displaySchedules = [
+    { label: 'Subuh', time: prayerTimes.Subuh },
+    { label: 'Syuruq', time: prayerTimes.Terbit },
+    { label: 'Dzuhur', time: prayerTimes.Dzuhur },
+    { label: 'Ashar', time: prayerTimes.Ashar },
+    { label: 'Maghrib', time: prayerTimes.Maghrib },
+    { label: 'Isya', time: prayerTimes.Isya },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <main 
+      onClick={unlockAudio}
+      className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d] ${!audioEnabled ? 'cursor-pointer' : ''}`}
+    >
+      
+      {/* --- LAYER 1: INFO IMAM --- */}
+      <ImamOverlay 
+        isVisible={imamActive.isVisible}
+        prayerLabel={imamActive.label}
+        utama={imamActive.utama}
+        badal={imamActive.badal}
+      />
+
+      {/* --- LAYER 2: IQOMAH COUNTDOWN --- */}
+      <IqomahOverlay 
+        key={iqomahActive.label} 
+        isVisible={iqomahActive.isVisible} 
+        durationMinutes={iqomahActive.duration}
+        onFinish={handleIqomahFinished}
+      />
+
+      {/* --- LAYER 3: FOTO ADZAN --- */}
+      <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />
+
+      {/* --- LAYER 4: SOUND INDICATOR (MINIMALIS) --- */}
+      <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50 transition-opacity">
+        {audioEnabled ? (
+          <>
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+            <span className="text-[10px] font-bold tracking-[0.2em] text-green-400/80 uppercase">Sound On</span>
+          </>
+        ) : (
+          <>
+            <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+            <span className="text-[10px] font-bold tracking-[0.2em] text-red-400/80 uppercase">Sound Off</span>
+          </>
+        )}
+      </div>
+
+      <BackgroundGradient />
+
+      {/* --- LAYER 5: KONTEN DASHBOARD --- */}
+      <div className="relative z-10 flex flex-col h-full justify-between">
+        <Header now={now} />
+        
+        <div className="grid grid-cols-6 gap-5 my-6">
+          {displaySchedules.map((item) => (
+            <PrayerCard 
+              key={item.label} 
+              label={item.label} 
+              time={item.time} 
+              isCurrent={isSameMinute(now, item.time)} 
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
-    </div>
+
+        <MarqueeFooter />
+      </div>
+    </main>
   );
 }
