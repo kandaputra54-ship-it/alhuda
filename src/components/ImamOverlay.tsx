@@ -54,7 +54,9 @@ export const ImamOverlay = ({ isVisible, prayerLabel, utama, badal }: ImamOverla
           <div className="hidden md:block h-10 w-[1px] bg-white/10" />
           
           <div className="text-center md:text-right">
-             <p className="text-sm text-white/40 italic">Mohon kesediaannya <br/> jika diperlukan</p>
+            <p className="text-sm text-white/40 italic leading-relaxed">
+               Mohon bersiap di shaf pertama <br/> tepat di belakang Imam
+             </p>
           </div>
         </div>
       </div>
