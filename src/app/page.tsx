@@ -36,8 +36,8 @@ export default function Home() {
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
 
   // --- KONFIGURASI DURASI TESTING ---
-  const ADZAN_IMAGE_DURATION = 300 * 1000; // 10 Detik Foto Adzan
-  const IMAM_INFO_DURATION = 15 * 1000;   // 15 Detik Info Imam
+  const ADZAN_IMAGE_DURATION = 300 * 1000; // custom 10 Detik Foto Adzan
+  const IMAM_INFO_DURATION = 15 * 1000;   // custom 15 Detik Info Imam
 
   // 2. INISIALISASI AUDIO SAAT MOUNT
   useEffect(() => {
