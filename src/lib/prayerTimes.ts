@@ -22,9 +22,9 @@ export const getPrayerTimes = (date: Date) => {
 
     // --- LOGIKA TESTING ---
     // Kita buat objek Date baru berdasarkan tanggal yang sedang berjalan
-    const isyaTest = new Date(date); 
+    const dhuhurTest = new Date(date); 
     // Set ke jam 19, menit 08, detik 00
-    isyaTest.setHours(20, 10, 0, 0); 
+    dhuhurTest.setHours(10, 27, 0, 0); 
     // ----------------------
 
     return {
@@ -33,6 +33,6 @@ export const getPrayerTimes = (date: Date) => {
         Dzuhur: prayerTimes.dhuhr,
         Ashar: prayerTimes.asr,
         Maghrib: prayerTimes.maghrib,
-        Isya: prayerTimes.isha, // Pakai variabel testing di sini
+        Isya: prayerTimes.isha, 
     };
 };
