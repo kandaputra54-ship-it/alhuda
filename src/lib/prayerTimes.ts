@@ -11,28 +11,28 @@ export const getPrayerTimes = (date: Date) => {
 
     params.adjustments.fajr = 1;
     params.adjustments.sunrise = -4;
-     params.adjustments.dhuhr = 0;
-     params.adjustments.asr = 1;
+    params.adjustments.dhuhr = 0;
+    params.adjustments.asr = 1;
     params.adjustments.maghrib = 2;
     params.adjustments.isha = 1;
-   
-    
+
+
 
     const prayerTimes = new PrayerTimes(coordinates, date, params);
 
     // --- LOGIKA TESTING ---
     // Kita buat objek Date baru berdasarkan tanggal yang sedang berjalan
-    const asharTest = new Date(date); 
+    const asharTest = new Date(date);
     // Set ke jam 19, menit 08, detik 00
-    asharTest.setHours(13, 51, 0, 0); 
+    asharTest.setHours(14, 23, 0, 0);
     // ----------------------
 
     return {
         Subuh: prayerTimes.fajr,
         Terbit: prayerTimes.sunrise,
         Dzuhur: prayerTimes.dhuhr,
-        Ashar: prayerTimes.asr,
+        Ashar: prayerTimes.asr, // prayerTimes.asr,  --- LOGIKA TESTING ---
         Maghrib: prayerTimes.maghrib,
-        Isya: prayerTimes.isha, 
+        Isya: prayerTimes.isha,
     };
 };

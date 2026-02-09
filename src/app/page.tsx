@@ -36,7 +36,7 @@ export default function Home() {
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
 
   // --- KONFIGURASI DURASI TESTING ---
-  const ADZAN_IMAGE_DURATION = 300 * 1000; // custom 10 Detik Foto Adzan
+  const ADZAN_IMAGE_DURATION = 180 * 1000; // custom 10 Detik Foto Adzan
   const IMAM_INFO_DURATION = 15 * 1000;   // custom 15 Detik Info Imam
 
   // 2. INISIALISASI AUDIO SAAT MOUNT
@@ -89,7 +89,7 @@ export default function Home() {
     const schedules = [
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 12 },
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 12 },
-      { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
+      { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10  },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
       { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
     ];
