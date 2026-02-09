@@ -10,7 +10,7 @@ export const getPrayerTimes = (date: Date) => {
     params.ishaAngle = 18;
 
     params.adjustments.fajr = 1;
-    params.adjustments.sunrise = -4;
+    params.adjustments.sunrise = -3;
     params.adjustments.dhuhr = 0;
     params.adjustments.asr = 1;
     params.adjustments.maghrib = 2;
@@ -22,9 +22,9 @@ export const getPrayerTimes = (date: Date) => {
 
     // --- LOGIKA TESTING ---
     // Kita buat objek Date baru berdasarkan tanggal yang sedang berjalan
-    const asharTest = new Date(date);
+    const fajrtest = new Date(date);
     // Set ke jam 19, menit 08, detik 00
-    asharTest.setHours(14, 23, 0, 0);
+    fajrtest.setHours(23, 59, 0, 0);
     // ----------------------
 
     return {

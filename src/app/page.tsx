@@ -36,7 +36,7 @@ export default function Home() {
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
 
   // --- KONFIGURASI DURASI TESTING ---
-  const ADZAN_IMAGE_DURATION = 180 * 1000; // custom 10 Detik Foto Adzan
+  const ADZAN_IMAGE_DURATION = 225 * 1000; // custom 10 Detik Foto Adzan
   const IMAM_INFO_DURATION = 15 * 1000;   // custom 15 Detik Info Imam
 
   // 2. INISIALISASI AUDIO SAAT MOUNT
@@ -89,7 +89,7 @@ export default function Home() {
     const schedules = [
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 12 },
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 12 },
-      { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10  },
+      { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
       { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
     ];
@@ -162,8 +162,27 @@ export default function Home() {
       {/* LAYER 1: INFO IMAM */}
       <ImamOverlay isVisible={imamActive.isVisible} prayerLabel={imamActive.label} utama={imamActive.utama} badal={imamActive.badal} />
 
-      {/* LAYER 2: IQOMAH COUNTDOWN */}
-      <IqomahOverlay key={iqomahActive.label} isVisible={iqomahActive.isVisible} durationMinutes={iqomahActive.duration} onFinish={handleIqomahFinished} />
+   
+      {/* --- LAYER 2: IQOMAH COUNTDOWN --- */}
+      <IqomahOverlay
+        key={iqomahActive.label}
+        isVisible={iqomahActive.isVisible}
+        durationMinutes={iqomahActive.duration}
+        onFinish={handleIqomahFinished}
+        prayerLabel={iqomahActive.label} // Kirim Label (misal: Subuh)
+
+        // Ambil data dari weeklySchedule berdasarkan hari dan nama shalat
+        utama={
+          iqomahActive.label
+            ? (weeklySchedule[new Intl.DateTimeFormat('id-ID', { weekday: 'long' }).format(now)] as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas'
+            : 'Petugas'
+        }
+        badal={
+          iqomahActive.label
+            ? (weeklySchedule[new Intl.DateTimeFormat('id-ID', { weekday: 'long' }).format(now)] as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-'
+            : '-'
+        }
+      />
 
       {/* LAYER 3: FOTO ADZAN */}
       <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />

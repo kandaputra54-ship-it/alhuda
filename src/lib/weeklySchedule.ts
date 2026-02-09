@@ -22,52 +22,52 @@ export interface DaySchedule {
 
 export const weeklySchedule: Record<string, DaySchedule> = {
   Senin: {
-    subuh: { utama: "Ust.Nashrullah", badal: "Syamsudin" },
+    subuh: { utama: "Nashrullah", badal: "Syamsudin" },
     dzuhur: { utama: "Tedi Koswara", badal: "Azan Saleh" },
     ashar: { utama: "Tedi Koswara", badal: "Azan Saleh" },
     maghrib: { utama: "Galuh Yogaswara", badal: "Tedi Koswara" },
     isya: { utama: "Tedi Koswara", badal: "Azan Saleh" }
   },
   Selasa: {
-    subuh: { utama: "Ust.Syakir Abdullah", badal: "Kanda Putra" },
+    subuh: { utama: "Syakir Abdullah", badal: "Kanda Putra" },
     dzuhur: { utama: "Kanda Putra", badal: "Tedi Koswara" },
     ashar: { utama: "Kanda Putra", badal: "Tedi Koswara" },
     maghrib: { utama: "Kanda Putra", badal: "Tedi Koswara" },
     isya: { utama: "Kanda Putra", badal: "Tedi Koswara" }
   },
   Rabu: {
-    subuh: { utama: "Ust.Nashrullah", badal: "Syamsudin" },
+    subuh: { utama: "Nashrullah", badal: "Syamsudin" },
     dzuhur: { utama: "Tedi Koswara", badal: "Kanda Putra" },
     ashar: { utama: "Tedi Koswara", badal: "Kanda Putra" },
-    maghrib: { utama: "Azan Saleh", badal: "Kanda Putra" },
-    isya: { utama: "Azan Saleh", badal: "Tedi Koswara" }
+    maghrib: { utama: "Kanda Putra", badal: "Azan Saleh" },
+    isya: { utama: "Tedi Koswara", badal: "Azan Saleh" }
   },
   Kamis: {
-    subuh: { utama: "Ust.Syakir Abdullah", badal: "Amin" },
+    subuh: { utama: "Syakir Abdullah", badal: "Azan Saleh" },
     dzuhur: { utama: "Kanda Putra", badal: "Kanda Putra" },
     ashar: { utama: "Azan Saleh", badal: "Kanda Putra" },
-    maghrib: { utama: "Azan Saleh", badal: "Kanda Putra" },
-    isya: { utama: "Azan Saleh", badal: "Kanda Putra" }
+    maghrib: { utama: "Kanda Putra", badal: "Adzan Saleh" },
+    isya: { utama: "Tedi Koswara", badal: "Adzan Saleh" }
   },
   Jumat: {
-    subuh: { utama: "Ust.Syakir Abdullah", badal: "Tedi Koswara" },
+    subuh: { utama: "Syakir Abdullah", badal: "Tedi Koswara" },
     jumat: { khatib: "KHOTIB", imam: "IMAM", muadzin: "Muadzin" },
     ashar: { utama: "M. Syam", badal: "Azan Saleh" },
     maghrib: { utama: "Tedi Koswara", badal: "Azan Saleh" },
     isya: { utama: "Tedi Koswara", badal: "Azan Saleh" }
   },
   Sabtu: {
-    subuh: { utama: "M. Syam", badal: "Kanda Putra" },
+    subuh: { utama: "M. Syamsudin", badal: "Kanda Putra" },
     dzuhur: { utama: "Kanda Putra", badal: "Azan Saleh" },
     ashar: { utama: "Kanda Putra", badal: "Azan Saleh" },
-    maghrib: { utama: "Ust.Syakir Abdullah", badal: "Azan Saleh" },
+    maghrib: { utama: "Syakir Abdullah", badal: "Azan Saleh" },
     isya: { utama: "Galuh Yogaswara", badal: "Tedi Koswara" }
   },
   Minggu: {
-    subuh: { utama: "Ust.Syakir Abdullah", badal: "Syamsudin" },
+    subuh: { utama: "Syakir Abdullah", badal: "Syamsudin" },
     dzuhur: { utama: "Azan Saleh", badal: "Syamsudin" },
     ashar: { utama: "Azan Saleh", badal: "Syamsudin" },
-    maghrib: { utama: "Ust.Syakir Abdullah", badal: "Syamsudin" },
-    isya: { utama: "Ust.Nashrullah", badal: "Syamsudin" }
+    maghrib: { utama: "Syakir Abdullah", badal: "Syamsudin" },
+    isya: { utama: "Nashrullah", badal: "Syamsudin" }
   }
 };

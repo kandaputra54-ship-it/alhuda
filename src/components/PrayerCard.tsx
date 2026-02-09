@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import {  Sunrise, Sun, Sunset, Moon , CloudSun , SunDim } from 'lucide-react';
+import { Sunrise, Sun, Sunset, Moon, CloudSun, SunDim } from 'lucide-react';
 
 interface PrayerCardProps {
   label: string;
@@ -9,7 +9,7 @@ interface PrayerCardProps {
 
 export const PrayerCard = ({ label, time, isCurrent }: PrayerCardProps) => {
   const getIcon = () => {
-    const props = { size: 32, className: "text-[#FAED21]" };
+    const props = { size: 28, className: "text-[#FAED21]" }; // Ukuran icon diperkecil sedikit
     switch (label) {
       case 'Subuh': return <Sunrise {...props} />;
       case 'Syuruq': return <CloudSun {...props} />;
@@ -25,24 +25,27 @@ export const PrayerCard = ({ label, time, isCurrent }: PrayerCardProps) => {
     <div 
       className={`
         relative flex flex-col items-center justify-center
-        h-64 rounded-[40px] border transition-all duration-500
+        h-auto min-h-[14rem] py-6 rounded-[30px] border transition-all duration-500
         backdrop-blur-2xl shadow-lg
         ${isCurrent 
-          ? 'bg-white/20 border-[#FAED21]/50 scale-[1.03] shadow-[#FAED21]/20 ring-1 ring-[#FAED21]/30' 
+          ? 'bg-white/20 border-[#FAED21]/50 scale-[1.02] shadow-[#FAED21]/20 ring-1 ring-[#FAED21]/30' 
           : 'bg-white/10 border-white/10'
         }
       `}
     >
-      <div className="mb-4 opacity-80">{getIcon()}</div>
-      <span className={`text-xl font-bold uppercase tracking-[0.2em] mb-4 ${isCurrent ? 'text-[#FAED21]' : 'text-white/70'}`}>
+      <div className="mb-3 opacity-80">{getIcon()}</div>
+      
+      <span className={`text-lg font-bold uppercase tracking-[0.1em] mb-2 ${isCurrent ? 'text-[#FAED21]' : 'text-white/70'}`}>
         {label}
       </span>
-      <span className={`text-7xl font-mono font-bold tracking-tighter ${isCurrent ? 'text-white' : 'text-white/90'}`}>
+
+      {/* Font diperkecil dari 7xl ke 5xl/6xl agar muat di grid TV */}
+      <span className={`text-5xl md:text-6xl font-mono font-bold tracking-tighter leading-none ${isCurrent ? 'text-white' : 'text-white/90'}`}>
         {format(time, 'HH:mm')}
       </span>
 
       {isCurrent && (
-        <div className="absolute -bottom-3 px-4 py-1 bg-[#FAED21] text-[#2C368B] text-[10px] font-bold rounded-full uppercase tracking-widest shadow-lg">
+        <div className="absolute -bottom-3 px-3 py-1 bg-[#FAED21] text-[#2C368B] text-[9px] font-extrabold rounded-full uppercase tracking-tighter shadow-lg">
           Sekarang
         </div>
       )}

@@ -44,10 +44,10 @@ export const Header = ({ now }: HeaderProps) => {
       <div className="flex items-center gap-10">
         <div className="relative w-64">
           <Image
-            src="/logo.png"
+            src="/logo3.png"
             alt="Logo Muhammadiyah"
-            width={280}
-            height={80}
+            width={300}
+            height={300}
             className="object-contain drop-shadow-xl"
             priority
           />
