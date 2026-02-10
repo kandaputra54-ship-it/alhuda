@@ -87,7 +87,7 @@ export default function Home() {
   // --- FUNGSI TRANSISI 1 & 2: CEK WAKTU ADZAN -> FOTO -> IQOMAH ---
   const checkTransitions = (currentTime: Date, times: any) => {
     const schedules = [
-      { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 12 },
+      { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 14 },
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 12 },
       { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
