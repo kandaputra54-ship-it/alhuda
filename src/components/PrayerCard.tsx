@@ -9,7 +9,7 @@ interface PrayerCardProps {
 
 export const PrayerCard = ({ label, time, isCurrent }: PrayerCardProps) => {
   const getIcon = () => {
-    const props = { size: 28, className: "text-[#FAED21]" }; // Ukuran icon diperkecil sedikit
+    const props = { size: 36, className: "text-[#FAED21]" }; // Ukuran icon diperkecil sedikit
     switch (label) {
       case 'Subuh': return <Sunrise {...props} />;
       case 'Syuruq': return <CloudSun {...props} />;
@@ -22,20 +22,21 @@ export const PrayerCard = ({ label, time, isCurrent }: PrayerCardProps) => {
   };
 
   return (
-    <div 
+    <div
       className={`
         relative flex flex-col items-center justify-center
         h-auto min-h-[14rem] py-6 rounded-[30px] border transition-all duration-500
         backdrop-blur-2xl shadow-lg
-        ${isCurrent 
-          ? 'bg-white/20 border-[#FAED21]/50 scale-[1.02] shadow-[#FAED21]/20 ring-1 ring-[#FAED21]/30' 
+        ${isCurrent
+          ? 'bg-white/20 border-[#FAED21]/50 scale-[1.02] shadow-[#FAED21]/20 ring-1 ring-[#FAED21]/30'
           : 'bg-white/10 border-white/10'
         }
       `}
     >
       <div className="mb-3 opacity-80">{getIcon()}</div>
-      
-      <span className={`text-lg font-bold uppercase tracking-[0.1em] mb-2 ${isCurrent ? 'text-[#FAED21]' : 'text-white/70'}`}>
+
+      {/* Contoh menggunakan text-3xl dan font-black untuk keterbacaan maksimal */}
+      <span className={`text-2xl md:text-3xl font-black uppercase tracking-[0.1em] mb-2 ${isCurrent ? 'text-[#FAED21]' : 'text-white/70'}`}>
         {label}
       </span>
 
