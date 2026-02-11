@@ -44,21 +44,24 @@ export const Header = ({ now }: HeaderProps) => {
       <div className="flex items-center gap-10">
         <div className="relative w-64">
           <Image
-            src="/logo3.png"
+            src="/logo-improve.png"
             alt="Logo Muhammadiyah"
-            width={300}
-            height={300}
+            width={400}
+            height={400}
             className="object-contain drop-shadow-xl"
             priority
           />
         </div>
 
         <div className="flex flex-col border-l-2 border-white/20 pl-10 text-white">
-          <h1 className="text-5xl font-bold tracking-tight leading-none mb-2">
+          {/* Mengubah text-5xl menjadi text-8xl */}
+          <h1 className="text-7xl font-bold tracking-tight leading-none mb-2">
             MASJID AL-HUDA
           </h1>
-          <p className="text-xl text-[#FAED21] tracking-[0.15em] uppercase flex items-center gap-3 font-semibold">
-            <MapPin size={22} /> PRM Rambutan • Utankayu Utara
+
+          {/* Mengubah text-xl menjadi text-3xl */}
+          <p className="text-3xl text-[#FAED21] tracking-[0.15em] uppercase flex items-center gap-3 font-semibold">
+            <MapPin size={32} /> PRM Rambutan • Utankayu Utara
           </p>
         </div>
       </div>
@@ -71,12 +74,12 @@ export const Header = ({ now }: HeaderProps) => {
 
         <div className="mt-4 flex flex-col items-end gap-1">
           {/* Tanggal Masehi dengan logika Ahad */}
-          <div className="text-xl text-white/70 font-medium uppercase tracking-[0.05em]">
+          <div className="text-3xl text-white/70 font-medium uppercase tracking-[0.05em]">
             {displayedDay}, {formattedDate}
           </div>
 
           {/* Tanggal Hijriah */}
-          <div className="text-2xl text-[#FAED21] font-bold flex items-center gap-2">
+          <div className="text-3xl text-[#FAED21] font-bold flex items-center gap-2">
             {hijriDate} H
           </div>
         </div>
