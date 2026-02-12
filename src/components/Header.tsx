@@ -46,8 +46,8 @@ export const Header = ({ now }: HeaderProps) => {
           <Image
             src="/logo-improve.png"
             alt="Logo Muhammadiyah"
-            width={400}
-            height={400}
+            width={800}
+            height={800}
             className="object-contain drop-shadow-xl"
             priority
           />
@@ -55,13 +55,13 @@ export const Header = ({ now }: HeaderProps) => {
 
         <div className="flex flex-col border-l-2 border-white/20 pl-10 text-white">
           {/* Mengubah text-5xl menjadi text-8xl */}
-          <h1 className="text-5xl font-bold tracking-tight leading-none mb-2">
-            MASJID MUHAMMADIYAH AL-HUDA
+          <h1 className="text-4xl font-bold tracking-tight leading-none mb-2">
+            MASJID MUHAMMADIYAH  AL-HUDA
           </h1>
 
           {/* Mengubah text-xl menjadi text-3xl */}
           <p className="text-3xl text-[#FAED21] tracking-[0.15em] uppercase flex items-center gap-3 font-semibold">
-            <MapPin size={32} /> PRM Rambutan • Utankayu Utara
+             PRM Rambutan  <br></br>PCM Utankayu 
           </p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export const Header = ({ now }: HeaderProps) => {
 
         <div className="mt-4 flex flex-col items-end gap-1">
           {/* Tanggal Masehi dengan logika Ahad */}
-          <div className="text-3xl text-white/70 font-medium uppercase tracking-[0.05em]">
+          <div className="text-3xl text-white font-medium uppercase tracking-[0.05em]">
             {displayedDay}, {formattedDate}
           </div>
 
