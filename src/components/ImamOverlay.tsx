@@ -31,7 +31,7 @@ export const ImamOverlay = ({ isVisible, prayerLabel, utama, badal }: ImamOverla
           <div className="absolute top-0 left-0 w-1.5 h-full bg-[#FAED21]" />
           
           <p className="text-lg text-white/60 mb-2 uppercase tracking-[0.2em] font-semibold pl-2">
-            Imam Utama
+            Imam 
           </p>
           {/* Ukuran nama disesuaikan agar tidak meledak */}
           <p className="text-5xl md:text-7xl font-bold text-white tracking-wide pl-2 truncate">
@@ -43,7 +43,7 @@ export const ImamOverlay = ({ isVisible, prayerLabel, utama, badal }: ImamOverla
         <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 flex flex-col md:flex-row items-center justify-between px-8 gap-4">
           <div className="text-center md:text-left">
             <p className="text-base text-white/50 mb-1 uppercase tracking-[0.1em]">
-              Imam Badal 
+               Badal 
             </p>
             <p className="text-3xl md:text-4xl font-semibold text-white/90 truncate">
               {badal}

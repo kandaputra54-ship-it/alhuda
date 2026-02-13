@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { El_Messiri } from 'next/font/google';
 import { getPrayerTimes } from '@/lib/prayerTimes';
 import { weeklySchedule } from '@/lib/weeklySchedule';
-import { isSameMinute } from 'date-fns';
+import { isAfter, isSameMinute } from 'date-fns';
 
 // Import Komponen
 import { BackgroundGradient } from '@/components/BackgroundGradient';
@@ -27,29 +27,27 @@ export default function Home() {
   const [audioEnabled, setAudioEnabled] = useState(false);
   const lastTriggeredPrayer = useRef<string | null>(null);
 
-  // 1. TAMBAHKAN REF UNTUK AUDIO ADZAN
   const adzanAudioRef = useRef<HTMLAudioElement | null>(null);
+  
 
   // --- STATE OVERLAY ---
   const [adzanActive, setAdzanActive] = useState({ isVisible: false, image: '' });
   const [iqomahActive, setIqomahActive] = useState({ isVisible: false, duration: 10, label: '' });
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
 
-  // --- KONFIGURASI DURASI TESTING ---
-  const ADZAN_IMAGE_DURATION = 225 * 1000; // custom 10 Detik Foto Adzan
-  const IMAM_INFO_DURATION = 15 * 1000;   // custom 15 Detik Info Imam
 
-  // 2. INISIALISASI AUDIO SAAT MOUNT
+  // --- KONFIGURASI DURASI ---
+  const ADZAN_IMAGE_DURATION = 225 * 1000;
+  const IMAM_INFO_DURATION = 15 * 1000;
+
   useEffect(() => {
     adzanAudioRef.current = new Audio('/sounds/beep.mp3');
     adzanAudioRef.current.load();
   }, []);
 
-  // --- FUNGSI UNLOCK AUDIO ---
   const unlockAudio = () => {
     if (!audioEnabled) {
       setAudioEnabled(true);
-      // Pancing audio agar browser beri izin
       if (adzanAudioRef.current) {
         adzanAudioRef.current.muted = true;
         adzanAudioRef.current.play().then(() => {
@@ -57,11 +55,9 @@ export default function Home() {
           adzanAudioRef.current!.muted = false;
         });
       }
-      console.log("Audio Unlocked");
     }
   };
 
-  // --- FUNGSI TRANSISI 3: IQOMAH SELESAI -> INFO IMAM ---
   const handleIqomahFinished = useCallback(() => {
     const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const d = new Date();
@@ -84,7 +80,6 @@ export default function Home() {
     }, IMAM_INFO_DURATION);
   }, [iqomahActive.label]);
 
-  // --- FUNGSI TRANSISI 1 & 2: CEK WAKTU ADZAN -> FOTO -> IQOMAH ---
   const checkTransitions = (currentTime: Date, times: any) => {
     const schedules = [
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 14 },
@@ -98,15 +93,12 @@ export default function Home() {
       if (isSameMinute(currentTime, entry.time) && lastTriggeredPrayer.current !== entry.label) {
         lastTriggeredPrayer.current = entry.label;
 
-        // 3. BUNYIKAN SUARA SAAT MASUK WAKTU ADZAN
         if (audioEnabled && adzanAudioRef.current) {
-          adzanAudioRef.current.play().catch(e => console.error("Audio Play Error:", e));
+          adzanAudioRef.current.play().catch(e => console.error(e));
         }
 
-        // 1. Munculkan Foto Adzan
         setAdzanActive({ isVisible: true, image: entry.img });
 
-        // 2. Tunggu durasi foto, lalu pindah ke Iqomah
         setTimeout(() => {
           setAdzanActive({ isVisible: false, image: '' });
           setIqomahActive({
@@ -119,7 +111,6 @@ export default function Home() {
     });
   };
 
-  // --- TIMER UTAMA (HEARTBEAT) ---
   useEffect(() => {
     const initialTimes = getPrayerTimes(new Date());
     setPrayerTimes(initialTimes);
@@ -127,7 +118,6 @@ export default function Home() {
     const timer = setInterval(() => {
       const d = new Date();
       setNow(d);
-
       const currentTimes = getPrayerTimes(d);
       checkTransitions(d, currentTimes);
 
@@ -140,76 +130,75 @@ export default function Home() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [audioEnabled]); // Tambahkan dependency audioEnabled agar logic selalu sinkron
+  }, [audioEnabled]);
 
   if (!prayerTimes) return <div className="bg-[#1a204d] h-screen" />;
 
+  // --- FIX: Definisi todaySchedule agar tidak error ---
+  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const currentDay = dayNames[now.getDay()];
+  const todaySchedule: any = weeklySchedule[currentDay];
+ 
+
   const displaySchedules = [
-    { label: 'Subuh', time: prayerTimes.Subuh },
+    { label: 'Subuh', time: prayerTimes.Subuh, ...todaySchedule?.subuh },
     { label: 'Syuruq', time: prayerTimes.Terbit },
-    { label: 'Dzuhur', time: prayerTimes.Dzuhur },
-    { label: 'Ashar', time: prayerTimes.Ashar },
-    { label: 'Maghrib', time: prayerTimes.Maghrib },
-    { label: 'Isya', time: prayerTimes.Isya },
+    {
+      label: 'Dzuhur',
+      time: prayerTimes.Dzuhur,
+
+      ...(currentDay === 'Jumat' ? todaySchedule?.jumat : todaySchedule?.dzuhur)
+    },
+    { label: 'Ashar', time: prayerTimes.Ashar, ...todaySchedule?.ashar },
+    { label: 'Maghrib', time: prayerTimes.Maghrib, ...todaySchedule?.maghrib },
+    { label: 'Isya', time: prayerTimes.Isya, ...todaySchedule?.isya },
   ];
+
+  const nextPrayer = displaySchedules.find((p: any) => isAfter(p.time, now));
 
   return (
     <main
       onClick={unlockAudio}
       className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d] ${!audioEnabled ? 'cursor-pointer' : ''}`}
     >
-
-      {/* LAYER 1: INFO IMAM */}
       <ImamOverlay isVisible={imamActive.isVisible} prayerLabel={imamActive.label} utama={imamActive.utama} badal={imamActive.badal} />
 
-   
-      {/* --- LAYER 2: IQOMAH COUNTDOWN --- */}
       <IqomahOverlay
         key={iqomahActive.label}
         isVisible={iqomahActive.isVisible}
         durationMinutes={iqomahActive.duration}
         onFinish={handleIqomahFinished}
-        prayerLabel={iqomahActive.label} // Kirim Label (misal: Subuh)
-
-        // Ambil data dari weeklySchedule berdasarkan hari dan nama shalat
-        utama={
-          iqomahActive.label
-            ? (weeklySchedule[new Intl.DateTimeFormat('id-ID', { weekday: 'long' }).format(now)] as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas'
-            : 'Petugas'
-        }
-        badal={
-          iqomahActive.label
-            ? (weeklySchedule[new Intl.DateTimeFormat('id-ID', { weekday: 'long' }).format(now)] as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-'
-            : '-'
-        }
+        prayerLabel={iqomahActive.label}
+        utama={iqomahActive.label ? (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas' : 'Petugas'}
+        badal={iqomahActive.label ? (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-' : '-'}
       />
 
-      {/* LAYER 3: FOTO ADZAN */}
       <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />
 
-      {/* LAYER 4: SOUND INDICATOR */}
-      <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50 transition-opacity">
+      <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50">
         {audioEnabled ? (
-          <>
-            <div className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-            <span className="text-[10px] font-bold tracking-[0.2em] text-green-400/80 uppercase">Sound On</span>
-          </>
+          <><div className="w-1.5 h-1.5 bg-green-500 rounded-full" /><span className="text-[10px] font-bold text-green-400/80 uppercase">Sound On</span></>
         ) : (
-          <>
-            <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
-            <span className="text-[10px] font-bold tracking-[0.2em] text-red-400/80 uppercase">Sound Off</span>
-          </>
+          <><div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" /><span className="text-[10px] font-bold text-red-400/80 uppercase">Sound Off</span></>
         )}
       </div>
 
       <BackgroundGradient />
 
-      {/* LAYER 5: KONTEN DASHBOARD */}
       <div className="relative z-10 flex flex-col h-full justify-between">
         <Header now={now} />
         <div className="grid grid-cols-6 gap-5 my-6">
-          {displaySchedules.map((item) => (
-            <PrayerCard key={item.label} label={item.label} time={item.time} isCurrent={isSameMinute(now, item.time)} />
+          {displaySchedules.map((item: any) => (
+            <PrayerCard
+              key={item.label}
+              label={item.label}
+              time={item.time}
+              currentTime={now} // Kirim waktu sekarang
+              isUpcoming={nextPrayer?.label === item.label}
+              utama={(item as any).utama}
+              badal={(item as any).badal}
+              muadzin={(item as any).muadzin}
+            />
           ))}
         </div>
         <MarqueeFooter />

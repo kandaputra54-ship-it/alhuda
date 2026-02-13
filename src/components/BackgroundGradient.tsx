@@ -1,6 +1,8 @@
+import Image from 'next/image';
+
 export const BackgroundGradient = () => (
   <div className="absolute inset-0 z-0 overflow-hidden bg-[#1a204d]">
-    {/* Menggunakan Radial Gradient murni, bukan filter blur */}
+    {/* Background Gradients */}
     <div 
       className="absolute inset-0 opacity-80"
       style={{
@@ -9,12 +11,24 @@ export const BackgroundGradient = () => (
           radial-gradient(circle at 105% 105%, #01A54D 0%, transparent 70%),
           radial-gradient(circle at 50% 50%, #10816F 0%, transparent 60%)
         `,
-        // Memaksa TV menggunakan rendering presisi tinggi
         imageRendering: 'auto',
       }}
     />
 
-    {/* LAYER RAHASIA: Dithering Pattern untuk pecah banding/buble */}
+    {/* LOGO SEBAGAI WATERMARK/SHADOW */}
+    <div className="absolute inset-0 flex items-center justify-center opacity-[0.40] pointer-events-none">
+      <div className="relative w-[250vh] h-[250vh]">
+        <Image
+          src="/logo.png"
+          alt="Watermark"
+          fill
+          className="object-contain grayscale brightness-0 invert"
+          priority
+        />
+      </div>
+    </div>
+
+    {/* Dithering Pattern */}
     <div 
       className="absolute inset-0 opacity-[0.15] pointer-events-none" 
       style={{ 
