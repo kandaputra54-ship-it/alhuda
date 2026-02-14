@@ -8,7 +8,7 @@ import { isAfter, isSameMinute } from 'date-fns';
 // Import Komponen
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { Header } from '@/components/Header';
-import { PrayerCard } from '@/components/PrayerCard';
+import  {PrayerCard } from '@/components/PrayerCard';
 import { MarqueeFooter } from '@/components/MarqueeFooter';
 import { AdzanOverlay } from '@/components/AdzanOverlay';
 import { IqomahOverlay } from '@/components/IqomahOverlay';

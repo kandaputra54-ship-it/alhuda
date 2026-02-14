@@ -42,13 +42,26 @@ export const Header = ({ now }: HeaderProps) => {
   return (
     <div className="flex justify-between items-center bg-white/5 backdrop-blur-3xl px-10 py-6 rounded-[40px] border border-white/10 shadow-2xl">
       <div className="flex items-center gap-10">
-        <div className="flex flex-col text-white"> {/* border-l-2 dan pl-10 dihapus */}
-          <h1 className="text-4xl font-bold tracking-tight leading-none mb-2">
-            MASJID MUHAMMADIYAH AL-HUDA
+        <div className="relative w-64">
+          <Image
+            src="/logo-improve.png"
+            alt="Logo Muhammadiyah"
+            width={400}
+            height={400}
+            className="object-contain drop-shadow-xl"
+            priority
+          />
+        </div>
+
+        <div className="flex flex-col border-l-2 border-white/20 pl-10 text-white">
+          {/* Mengubah text-5xl menjadi text-8xl */}
+          <h1 className="text-7xl font-bold tracking-tight leading-none mb-2">
+            MASJID AL-HUDA
           </h1>
 
+          {/* Mengubah text-xl menjadi text-3xl */}
           <p className="text-3xl text-[#FAED21] tracking-[0.15em] uppercase flex items-center gap-3 font-semibold">
-            PRM Rambutan <br /> PCM Utankayu
+            PRM Rambutan  <br />PCM Utankayu 
           </p>
         </div>
       </div>
@@ -61,7 +74,7 @@ export const Header = ({ now }: HeaderProps) => {
 
         <div className="mt-4 flex flex-col items-end gap-1">
           {/* Tanggal Masehi dengan logika Ahad */}
-          <div className="text-3xl text-white font-medium uppercase tracking-[0.05em]">
+          <div className="text-3xl text-white/70 font-medium uppercase tracking-[0.05em]">
             {displayedDay}, {formattedDate}
           </div>
 

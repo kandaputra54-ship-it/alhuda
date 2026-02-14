@@ -16,17 +16,7 @@ export const BackgroundGradient = () => (
     />
 
     {/* LOGO SEBAGAI WATERMARK/SHADOW */}
-    <div className="absolute inset-0 flex items-center justify-center opacity-[0.40] pointer-events-none">
-      <div className="relative w-[250vh] h-[250vh]">
-        <Image
-          src="/logo.png"
-          alt="Watermark"
-          fill
-          className="object-contain grayscale brightness-0 invert"
-          priority
-        />
-      </div>
-    </div>
+ 
 
     {/* Dithering Pattern */}
     <div 
