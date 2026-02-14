@@ -63,10 +63,10 @@ export const PrayerCard = ({ label, time, currentTime, isUpcoming, utama, badal,
       {utama && (
         <div className="w-full mt-2 border-t border-white/10 pt-2 flex flex-col items-center">
           <div key={infoIndex} className="animate-in fade-in slide-in-from-bottom-1 duration-500 flex flex-col items-center">
-            <span className={`text-[15px] font-bold uppercase tracking-widest ${currentInfo.color}`}>
+            <span className={`text-[20px] font-bold uppercase tracking-widest ${currentInfo.color}`}>
               {currentInfo.role}
             </span>
-            <span className="text-xl font-black text-white leading-tight truncate max-w-[120px]">
+            <span className="text-[22px] font-black text-white leading-tight truncate max-w-[120px]">
               {currentInfo.name}
             </span>
           </div>
