@@ -1,5 +1,10 @@
 // src/lib/weeklySchedule.ts
 
+
+export interface RamadhanSchedule {
+  imam: string;
+  penceramah: string;
+}
 export interface ImamSchedule {
   utama: string;
   badal: string;
@@ -20,6 +25,7 @@ export interface DaySchedule {
   ashar: ImamSchedule;
   maghrib: ImamSchedule;
   isya: ImamSchedule;
+  ramadhan?: RamadhanSchedule;
 }
 
 export const weeklySchedule: Record<string, DaySchedule> = {
@@ -30,12 +36,16 @@ export const weeklySchedule: Record<string, DaySchedule> = {
     maghrib: { utama: "Galuh Yogaswara", badal: "Tedi Koswara", muadzin: "Surya Andalas" },
     isya: { utama: "Tedi Koswara", badal: "Azan Saleh", muadzin: "Surya Andalas" }
   },
-  Selasa: {
+ Selasa: {
     subuh: { utama: "Syakir Abdullah", badal: "Kanda Putra", muadzin: "Ardanel" },
     dzuhur: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Rusman" },
     ashar: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Icam" },
     maghrib: { utama: "Dewa Alfian", badal: "Kanda Putra", muadzin: "Ardanel" },
-    isya: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Ardanel" }
+    isya: { utama: "M. Syamsudin", badal: "Tedi Koswara", muadzin: "Ardanel" },
+    ramadhan: { 
+      imam: "Syakir Abdullah", 
+      penceramah: "M. Syamsudin" 
+    }
   },
   Rabu: {
     subuh: { utama: "Nashrullah", badal: "Syamsudin", muadzin: "Nuryaman" },

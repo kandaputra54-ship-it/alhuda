@@ -13,6 +13,7 @@ import { MarqueeFooter } from '@/components/MarqueeFooter';
 import { AdzanOverlay } from '@/components/AdzanOverlay';
 import { IqomahOverlay } from '@/components/IqomahOverlay';
 import { ImamOverlay } from '@/components/ImamOverlay';
+import { RamadhanOverlay } from '@/components/RamadhanOverlay';
 
 const elMessiri = El_Messiri({
   subsets: ['latin'],
@@ -34,6 +35,7 @@ export default function Home() {
   const [adzanActive, setAdzanActive] = useState({ isVisible: false, image: '' });
   const [iqomahActive, setIqomahActive] = useState({ isVisible: false, duration: 10, label: '' });
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
+  const [ramadhanActive, setRamadhanActive] = useState({ isVisible: false, imam: '', penceramah: '' });
 
 
   // --- KONFIGURASI DURASI ---
@@ -58,27 +60,47 @@ export default function Home() {
     }
   };
 
-  const handleIqomahFinished = useCallback(() => {
-    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const d = new Date();
-    const currentDay = dayNames[d.getDay()];
-    const todaySchedule: any = weeklySchedule[currentDay];
+const handleIqomahFinished = useCallback(() => {
+  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const d = new Date();
+  const currentDay = dayNames[d.getDay()];
+  const todaySchedule: any = weeklySchedule[currentDay];
 
-    const prayerKey = iqomahActive.label.toLowerCase();
-    const imamData = todaySchedule[prayerKey];
+  const prayerKey = iqomahActive.label.toLowerCase();
+  const imamData = todaySchedule[prayerKey];
 
-    setIqomahActive(prev => ({ ...prev, isVisible: false }));
-    setImamActive({
-      isVisible: true,
-      label: iqomahActive.label,
-      utama: imamData?.utama || 'Petugas',
-      badal: imamData?.badal || '-'
-    });
+  // Matikan Iqomah
+  setIqomahActive(prev => ({ ...prev, isVisible: false }));
 
-    setTimeout(() => {
-      setImamActive(prev => ({ ...prev, isVisible: false }));
-    }, IMAM_INFO_DURATION);
-  }, [iqomahActive.label]);
+  // Tampilkan Jadwal Imam Shalat Isya (Fardhu)
+  setImamActive({
+    isVisible: true,
+    label: iqomahActive.label,
+    utama: imamData?.utama || 'Petugas',
+    badal: imamData?.badal || '-'
+  });
+
+  // Tunggu 15 detik (Durasi Imam Isya) baru pindah ke Ramadhan
+  setTimeout(() => {
+    setImamActive(prev => ({ ...prev, isVisible: false }));
+
+    // JIKA ISYA: Langsung Tampilkan Agenda Ramadhan
+    if (iqomahActive.label === 'Isya' && todaySchedule.ramadhan) {
+      setRamadhanActive({
+        isVisible: true,
+        imam: todaySchedule.ramadhan.imam,
+        penceramah: todaySchedule.ramadhan.penceramah
+      });
+
+      // DURASI: 1 JAM (3600 detik)
+      // Ini akan menutupi layar selama kegiatan berlangsung
+      setTimeout(() => {
+        setRamadhanActive(prev => ({ ...prev, isVisible: false }));
+      }, 3600000); 
+    }
+  }, IMAM_INFO_DURATION);
+
+}, [iqomahActive.label, IMAM_INFO_DURATION]);
 
   const checkTransitions = (currentTime: Date, times: any) => {
     const schedules = [
@@ -86,7 +108,7 @@ export default function Home() {
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
       { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
-      { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
+      { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10},
     ];
 
     schedules.forEach((entry) => {
@@ -174,6 +196,12 @@ export default function Home() {
       />
 
       <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />
+
+      <RamadhanOverlay 
+        isVisible={ramadhanActive.isVisible} 
+        imam={ramadhanActive.imam} 
+        penceramah={ramadhanActive.penceramah} 
+      />
 
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50">
         {audioEnabled ? (
