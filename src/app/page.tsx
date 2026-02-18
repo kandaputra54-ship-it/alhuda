@@ -8,7 +8,7 @@ import { isAfter, isSameMinute } from 'date-fns';
 // Import Komponen
 import { BackgroundGradient } from '@/components/BackgroundGradient';
 import { Header } from '@/components/Header';
-import  {PrayerCard } from '@/components/PrayerCard';
+import { PrayerCard } from '@/components/PrayerCard';
 import { MarqueeFooter } from '@/components/MarqueeFooter';
 import { AdzanOverlay } from '@/components/AdzanOverlay';
 import { IqomahOverlay } from '@/components/IqomahOverlay';
@@ -29,7 +29,7 @@ export default function Home() {
   const lastTriggeredPrayer = useRef<string | null>(null);
 
   const adzanAudioRef = useRef<HTMLAudioElement | null>(null);
-  
+
 
   // --- STATE OVERLAY ---
   const [adzanActive, setAdzanActive] = useState({ isVisible: false, image: '' });
@@ -60,47 +60,47 @@ export default function Home() {
     }
   };
 
-const handleIqomahFinished = useCallback(() => {
-  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const d = new Date();
-  const currentDay = dayNames[d.getDay()];
-  const todaySchedule: any = weeklySchedule[currentDay];
+  const handleIqomahFinished = useCallback(() => {
+    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const d = new Date();
+    const currentDay = dayNames[d.getDay()];
+    const todaySchedule: any = weeklySchedule[currentDay];
 
-  const prayerKey = iqomahActive.label.toLowerCase();
-  const imamData = todaySchedule[prayerKey];
+    const prayerKey = iqomahActive.label.toLowerCase();
+    const imamData = todaySchedule[prayerKey];
 
-  // Matikan Iqomah
-  setIqomahActive(prev => ({ ...prev, isVisible: false }));
+    // Matikan Iqomah
+    setIqomahActive(prev => ({ ...prev, isVisible: false }));
 
-  // Tampilkan Jadwal Imam Shalat Isya (Fardhu)
-  setImamActive({
-    isVisible: true,
-    label: iqomahActive.label,
-    utama: imamData?.utama || 'Petugas',
-    badal: imamData?.badal || '-'
-  });
+    // Tampilkan Jadwal Imam Shalat Isya (Fardhu)
+    setImamActive({
+      isVisible: true,
+      label: iqomahActive.label,
+      utama: imamData?.utama || 'Petugas',
+      badal: imamData?.badal || '-'
+    });
 
-  // Tunggu 15 detik (Durasi Imam Isya) baru pindah ke Ramadhan
-  setTimeout(() => {
-    setImamActive(prev => ({ ...prev, isVisible: false }));
+    // Tunggu 15 detik (Durasi Imam Isya) baru pindah ke Ramadhan
+    setTimeout(() => {
+      setImamActive(prev => ({ ...prev, isVisible: false }));
 
-    // JIKA ISYA: Langsung Tampilkan Agenda Ramadhan
-    if (iqomahActive.label === 'Isya' && todaySchedule.ramadhan) {
-      setRamadhanActive({
-        isVisible: true,
-        imam: todaySchedule.ramadhan.imam,
-        penceramah: todaySchedule.ramadhan.penceramah
-      });
+      // JIKA ISYA: Langsung Tampilkan Agenda Ramadhan
+      if (iqomahActive.label === 'Isya' && todaySchedule.ramadhan) {
+        setRamadhanActive({
+          isVisible: true,
+          imam: todaySchedule.ramadhan.imam,
+          penceramah: todaySchedule.ramadhan.penceramah
+        });
 
-      // DURASI: 1 JAM (3600 detik)
-      // Ini akan menutupi layar selama kegiatan berlangsung
-      setTimeout(() => {
-        setRamadhanActive(prev => ({ ...prev, isVisible: false }));
-      }, 3600000); 
-    }
-  }, IMAM_INFO_DURATION);
+        // DURASI: 1 JAM (3600 detik)
+        // Ini akan menutupi layar selama kegiatan berlangsung
+        setTimeout(() => {
+          setRamadhanActive(prev => ({ ...prev, isVisible: false }));
+        }, 1800000); // 1800000 ms = 30 menit, sesuaikan dengan durasi kegiatan Ramadhan yang sebenarnya
+      }
+    }, IMAM_INFO_DURATION);
 
-}, [iqomahActive.label, IMAM_INFO_DURATION]);
+  }, [iqomahActive.label, IMAM_INFO_DURATION]);
 
   const checkTransitions = (currentTime: Date, times: any) => {
     const schedules = [
@@ -108,7 +108,7 @@ const handleIqomahFinished = useCallback(() => {
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
       { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
-      { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10},
+      { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
     ];
 
     schedules.forEach((entry) => {
@@ -160,7 +160,7 @@ const handleIqomahFinished = useCallback(() => {
   const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const currentDay = dayNames[now.getDay()];
   const todaySchedule: any = weeklySchedule[currentDay];
- 
+
 
   const displaySchedules = [
     { label: 'Subuh', time: prayerTimes.Subuh, ...todaySchedule?.subuh },
@@ -197,10 +197,10 @@ const handleIqomahFinished = useCallback(() => {
 
       <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />
 
-      <RamadhanOverlay 
-        isVisible={ramadhanActive.isVisible} 
-        imam={ramadhanActive.imam} 
-        penceramah={ramadhanActive.penceramah} 
+      <RamadhanOverlay
+        isVisible={ramadhanActive.isVisible}
+        imam={ramadhanActive.imam}
+        penceramah={ramadhanActive.penceramah}
       />
 
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50">
