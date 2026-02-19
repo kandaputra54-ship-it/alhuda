@@ -96,7 +96,7 @@ export default function Home() {
         // Ini akan menutupi layar selama kegiatan berlangsung
         setTimeout(() => {
           setRamadhanActive(prev => ({ ...prev, isVisible: false }));
-        }, 1800000); // 1800000 ms = 30 menit, sesuaikan dengan durasi kegiatan Ramadhan yang sebenarnya
+        }, 2700000); // 45 menit dalam milidetik // 1800000 ms = 30 menit, sesuaikan dengan durasi kegiatan Ramadhan yang sebenarnya
       }
     }, IMAM_INFO_DURATION);
 
@@ -107,7 +107,7 @@ export default function Home() {
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 14 },
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
       { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
-      { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 10 },
+      { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 13 },
       { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
     ];
 
