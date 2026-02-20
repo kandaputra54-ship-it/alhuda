@@ -67,24 +67,37 @@ export default function Home() {
     const todaySchedule: any = weeklySchedule[currentDay];
 
     const prayerKey = iqomahActive.label.toLowerCase();
-    const imamData = todaySchedule[prayerKey];
+
+    // Logic penentuan Imam/Khatib
+    let imamUtama = 'Petugas';
+    let imamBadal = '-';
+    let displayLabel = iqomahActive.label;
+
+    if (currentDay === 'Jumat' && prayerKey === 'dzuhur') {
+      imamUtama = todaySchedule.jumat?.khatib || 'Khotib';
+      imamBadal = todaySchedule.jumat?.imam || 'Imam';
+      displayLabel = 'Jumat';
+    } else {
+      const imamData = todaySchedule[prayerKey];
+      imamUtama = imamData?.utama || 'Petugas';
+      imamBadal = imamData?.badal || '-';
+    }
 
     // Matikan Iqomah
     setIqomahActive(prev => ({ ...prev, isVisible: false }));
 
-    // Tampilkan Jadwal Imam Shalat Isya (Fardhu)
+    // Tampilkan Jadwal Imam/Khatib
     setImamActive({
       isVisible: true,
-      label: iqomahActive.label,
-      utama: imamData?.utama || 'Petugas',
-      badal: imamData?.badal || '-'
+      label: displayLabel,
+      utama: imamUtama,
+      badal: imamBadal
     });
 
-    // Tunggu 15 detik (Durasi Imam Isya) baru pindah ke Ramadhan
+    // Tunggu durasi info imam baru cek Ramadhan
     setTimeout(() => {
       setImamActive(prev => ({ ...prev, isVisible: false }));
 
-      // JIKA ISYA: Langsung Tampilkan Agenda Ramadhan
       if (iqomahActive.label === 'Isya' && todaySchedule.ramadhan) {
         setRamadhanActive({
           isVisible: true,
@@ -92,11 +105,9 @@ export default function Home() {
           penceramah: todaySchedule.ramadhan.penceramah
         });
 
-        // DURASI: 1 JAM (3600 detik)
-        // Ini akan menutupi layar selama kegiatan berlangsung
         setTimeout(() => {
           setRamadhanActive(prev => ({ ...prev, isVisible: false }));
-        }, 2700000); // 45 menit dalam milidetik // 1800000 ms = 30 menit, sesuaikan dengan durasi kegiatan Ramadhan yang sebenarnya
+        }, 2700000);
       }
     }, IMAM_INFO_DURATION);
 
@@ -105,7 +116,7 @@ export default function Home() {
   const checkTransitions = (currentTime: Date, times: any) => {
     const schedules = [
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 14 },
-      { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
+      { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 35 },
       { label: 'Ashar', time: times.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: times.Maghrib, img: '/maghrib.png', iqomah: 13 },
       { label: 'Isya', time: times.Isya, img: '/isya.png', iqomah: 10 },
@@ -190,9 +201,19 @@ export default function Home() {
         isVisible={iqomahActive.isVisible}
         durationMinutes={iqomahActive.duration}
         onFinish={handleIqomahFinished}
-        prayerLabel={iqomahActive.label}
-        utama={iqomahActive.label ? (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas' : 'Petugas'}
-        badal={iqomahActive.label ? (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-' : '-'}
+        // Jika Jumat Dzuhur, ganti label jadi Shalat Jumat
+        prayerLabel={currentDay === 'Jumat' && iqomahActive.label === 'Dzuhur' ? 'Jumat' : iqomahActive.label}
+        // Ambil data khatib jika jumat dzuhur
+        utama={
+          currentDay === 'Jumat' && iqomahActive.label === 'Dzuhur'
+            ? todaySchedule?.jumat?.khatib
+            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas'
+        }
+        badal={
+          currentDay === 'Jumat' && iqomahActive.label === 'Dzuhur'
+            ? todaySchedule?.jumat?.imam
+            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-'
+        }
       />
 
       <AdzanOverlay isVisible={adzanActive.isVisible} imagePath={adzanActive.image} />
