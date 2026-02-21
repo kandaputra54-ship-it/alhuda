@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { format } from 'date-fns';
+import { format, addDays, } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { MapPin } from 'lucide-react';
+import { getPrayerTimes } from '@/lib/prayerTimes';
+
 
 interface HeaderProps {
   now: Date;
@@ -10,17 +11,22 @@ interface HeaderProps {
 
 export const Header = ({ now }: HeaderProps) => {
   const [hijriDate, setHijriDate] = useState<string>('Memuat...');
+  // 1. Hitung apakah sekarang sudah lewat Maghrib
+  const times = getPrayerTimes(now);
+  const isAfterMaghrib = now >= times.Maghrib;
 
   useEffect(() => {
     const fetchHijri = async () => {
       try {
-        const dateStr = format(now, 'dd-MM-yyyy');
+        // 2. Jika lewat Maghrib, tembak API untuk tanggal besok
+        const targetDate = isAfterMaghrib ? addDays(now, 1) : now;
+        const dateStr = format(targetDate, 'dd-MM-yyyy');
+
         const response = await fetch(`https://api.aladhan.com/v1/gToH?date=${dateStr}`);
         const json = await response.json();
 
         if (json.code === 200) {
           const { day, month, year } = json.data.hijri;
-          // Tips: Kamu bisa mapping month.en ke bahasa Indonesia jika ingin lebih rapi
           setHijriDate(`${day} ${month.en} ${year}`);
         }
       } catch (error) {
@@ -30,7 +36,8 @@ export const Header = ({ now }: HeaderProps) => {
     };
 
     fetchHijri();
-  }, [now.toDateString()]);
+   
+  }, [now.toDateString(), isAfterMaghrib]);
 
   // LOGIKA CUSTOM HARI: Ganti "Minggu" jadi "Ahad"
   const dayName = format(now, 'EEEE', { locale: id }); // Hasil default: "Minggu"
@@ -56,12 +63,12 @@ export const Header = ({ now }: HeaderProps) => {
         <div className="flex flex-col border-l-2 border-white/20 pl-10 text-white">
           {/* Mengubah text-5xl menjadi text-8xl */}
           <h1 className="text-4xl font-bold tracking-tight leading-none mb-2">
-             MASJID MUHAMMADIYAH AL-HUDA
+            MASJID MUHAMMADIYAH AL-HUDA
           </h1>
 
           {/* Mengubah text-xl menjadi text-3xl */}
           <p className="text-3xl text-[#FAED21] tracking-[0.15em] uppercase flex items-center gap-3 font-semibold">
-            PRM Rambutan  <br />PCM Utankayu 
+            PRM Rambutan  <br />PCM Utankayu
           </p>
         </div>
       </div>
