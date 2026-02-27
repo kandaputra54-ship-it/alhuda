@@ -14,6 +14,7 @@ import { AdzanOverlay } from '@/components/AdzanOverlay';
 import { IqomahOverlay } from '@/components/IqomahOverlay';
 import { ImamOverlay } from '@/components/ImamOverlay';
 import { RamadhanOverlay } from '@/components/RamadhanOverlay';
+import { JumatOverlay } from '@/components/JumatOverlay';
 
 const elMessiri = El_Messiri({
   subsets: ['latin'],
@@ -36,6 +37,7 @@ export default function Home() {
   const [iqomahActive, setIqomahActive] = useState({ isVisible: false, duration: 10, label: '' });
   const [imamActive, setImamActive] = useState({ isVisible: false, label: '', utama: '', badal: '' });
   const [ramadhanActive, setRamadhanActive] = useState({ isVisible: false, imam: '', penceramah: '' });
+  const [jumatActive, setJumatActive] = useState({ isVisible: false, khatib: '', imam: '' });
 
 
   // --- KONFIGURASI DURASI ---
@@ -134,11 +136,28 @@ export default function Home() {
 
         setTimeout(() => {
           setAdzanActive({ isVisible: false, image: '' });
-          setIqomahActive({
-            isVisible: true,
-            duration: entry.iqomah,
-            label: entry.label
-          });
+
+          if (currentDay === 'Jumat' && entry.label === 'Dzuhur') {
+            // Tampilkan Overlay Jumat
+            setJumatActive({
+              isVisible: true,
+              khatib: todaySchedule.jumat?.khatib || 'Petugas',
+              imam: todaySchedule.jumat?.imam || 'Petugas'
+            });
+
+            // Otomatis tutup setelah 30 menit (30 * 60 * 1000 ms)
+            setTimeout(() => {
+              setJumatActive(prev => ({ ...prev, isVisible: false }));
+            }, 30 * 60 * 1000);
+
+          } else {
+            // Shalat lainnya tetap pakai Iqomah normal
+            setIqomahActive({
+              isVisible: true,
+              duration: entry.iqomah,
+              label: entry.label
+            });
+          }
         }, ADZAN_IMAGE_DURATION);
       }
     });
@@ -223,7 +242,12 @@ export default function Home() {
         imam={ramadhanActive.imam}
         penceramah={ramadhanActive.penceramah}
       />
-
+      <JumatOverlay
+        isVisible={jumatActive.isVisible}
+        khatib={jumatActive.khatib}
+        imam={jumatActive.imam}
+      />
+      
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50">
         {audioEnabled ? (
           <><div className="w-1.5 h-1.5 bg-green-500 rounded-full" /><span className="text-[10px] font-bold text-green-400/80 uppercase">Sound On</span></>
