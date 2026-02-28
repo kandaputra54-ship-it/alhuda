@@ -115,7 +115,12 @@ export default function Home() {
 
   }, [iqomahActive.label, IMAM_INFO_DURATION]);
 
-  const checkTransitions = (currentTime: Date, times: any) => {
+  // Bungkus dengan useCallback agar fungsi stabil
+  const checkTransitions = useCallback((currentTime: Date, times: any) => {
+    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const currentDayName = dayNames[currentTime.getDay()];
+    const todayData: any = weeklySchedule[currentDayName];
+
     const schedules = [
       { label: 'Subuh', time: times.Subuh, img: '/subuh.png', iqomah: 14 },
       { label: 'Dzuhur', time: times.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
@@ -129,29 +134,25 @@ export default function Home() {
         lastTriggeredPrayer.current = entry.label;
 
         if (audioEnabled && adzanAudioRef.current) {
-          adzanAudioRef.current.play().catch(e => console.error(e));
+          adzanAudioRef.current.play().catch(e => console.error("Audio error:", e));
         }
 
         setAdzanActive({ isVisible: true, image: entry.img });
 
+        // Simpan referensi data ke dalam scope setTimeout agar tidak hilang
         setTimeout(() => {
           setAdzanActive({ isVisible: false, image: '' });
 
-          if (currentDay === 'Jumat' && entry.label === 'Dzuhur') {
-            // Tampilkan Overlay Jumat
+          if (currentDayName === 'Jumat' && entry.label === 'Dzuhur') {
             setJumatActive({
               isVisible: true,
-              khatib: todaySchedule.jumat?.khatib || 'Petugas',
-              imam: todaySchedule.jumat?.imam || 'Petugas'
+              khatib: todayData.jumat?.khatib || 'Petugas',
+              imam: todayData.jumat?.imam || 'Petugas'
             });
-
-            // Otomatis tutup setelah 30 menit (30 * 60 * 1000 ms)
-            setTimeout(() => {
-              setJumatActive(prev => ({ ...prev, isVisible: false }));
-            }, 30 * 60 * 1000);
-
+            // Auto close JumatOverlay setelah 30 menit
+            setTimeout(() => setJumatActive(p => ({ ...p, isVisible: false })), 30 * 60 * 1000);
           } else {
-            // Shalat lainnya tetap pakai Iqomah normal
+            // PAKSA MUNCUL: Selain Dzuhur Jumat, wajib masuk sini
             setIqomahActive({
               isVisible: true,
               duration: entry.iqomah,
@@ -161,7 +162,7 @@ export default function Home() {
         }, ADZAN_IMAGE_DURATION);
       }
     });
-  };
+  }, [audioEnabled]); // Penting: Dependency ini memastikan fungsi tahu status audio terbaru
 
   useEffect(() => {
     const initialTimes = getPrayerTimes(new Date());
@@ -247,7 +248,7 @@ export default function Home() {
         khatib={jumatActive.khatib}
         imam={jumatActive.imam}
       />
-      
+
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-50">
         {audioEnabled ? (
           <><div className="w-1.5 h-1.5 bg-green-500 rounded-full" /><span className="text-[10px] font-bold text-green-400/80 uppercase">Sound On</span></>
