@@ -71,7 +71,7 @@ export default function Home() {
     const prayerKey = iqomahActive.label.toLowerCase();
 
     // Logic penentuan Imam/Khatib
-    let imamUtama = 'Petugas';
+    let imamUtama = 'Imam Terjadwal';
     let imamBadal = '-';
     let displayLabel = iqomahActive.label;
 
@@ -81,7 +81,7 @@ export default function Home() {
       displayLabel = 'Jumat';
     } else {
       const imamData = todaySchedule[prayerKey];
-      imamUtama = imamData?.utama || 'Petugas';
+      imamUtama = imamData?.utama || 'Imam Terjadwal';
       imamBadal = imamData?.badal || '-';
     }
 
@@ -139,20 +139,20 @@ export default function Home() {
 
         setAdzanActive({ isVisible: true, image: entry.img });
 
-        // Simpan referensi data ke dalam scope setTimeout agar tidak hilang
         setTimeout(() => {
           setAdzanActive({ isVisible: false, image: '' });
 
           if (currentDayName === 'Jumat' && entry.label === 'Dzuhur') {
+            // LANGSUNG JUMAT OVERLAY (Tanpa Iqomah)
             setJumatActive({
               isVisible: true,
-              khatib: todayData.jumat?.khatib || 'Petugas',
-              imam: todayData.jumat?.imam || 'Petugas'
+              khatib: todayData.jumat?.khatib || 'Khotib Terjadwal',
+              imam: todayData.jumat?.imam || 'Badal Terjadwal'
             });
-            // Auto close JumatOverlay setelah 30 menit
+            // Overlay ini akan tertutup otomatis dalam 30 menit (bisa disesuaikan)
             setTimeout(() => setJumatActive(p => ({ ...p, isVisible: false })), 30 * 60 * 1000);
           } else {
-            // PAKSA MUNCUL: Selain Dzuhur Jumat, wajib masuk sini
+            // Selain Jumat Dzuhur, tetap pakai Iqomah
             setIqomahActive({
               isVisible: true,
               duration: entry.iqomah,
@@ -162,7 +162,7 @@ export default function Home() {
         }, ADZAN_IMAGE_DURATION);
       }
     });
-  }, [audioEnabled]); // Penting: Dependency ini memastikan fungsi tahu status audio terbaru
+  }, [audioEnabled, ADZAN_IMAGE_DURATION]); // Penting: Dependency ini memastikan fungsi tahu status audio terbaru
 
   useEffect(() => {
     const initialTimes = getPrayerTimes(new Date());
@@ -227,12 +227,12 @@ export default function Home() {
         utama={
           currentDay === 'Jumat' && iqomahActive.label === 'Dzuhur'
             ? todaySchedule?.jumat?.khatib
-            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Petugas'
+            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.utama || 'Khatib Terjadwal'
         }
         badal={
           currentDay === 'Jumat' && iqomahActive.label === 'Dzuhur'
             ? todaySchedule?.jumat?.imam
-            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.badal || '-'
+            : (todaySchedule as any)?.[iqomahActive.label.toLowerCase()]?.badal || 'Badal Terjadwal'
         }
       />
 
