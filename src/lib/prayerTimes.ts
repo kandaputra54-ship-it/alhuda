@@ -20,8 +20,7 @@ export const getPrayerTimes = (date: Date) => {
 
     const prayerTimes = new PrayerTimes(coordinates, date, params);
 
-    // --- LOGIKA TESTING ---
-    // Kita buat objek Date baru berdasarkan tanggal yang sedang berjalan
+  
     const isyatest = new Date(date);
     // Set ke jam 19, menit 08, detik 00
     isyatest.setHours(17, 57, 0, 0);
