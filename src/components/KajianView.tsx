@@ -78,13 +78,13 @@ export const KajianView = () => {
             <div className="flex-1 flex flex-col justify-center bg-[#FAED21]/5 p-[2.5vh] rounded-[1.5vh] border border-[#FAED21]/15 animate-in fade-in slide-in-from-bottom duration-700">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[#FAED21] font-black text-[2vh] uppercase tracking-widest">Ahad</span>
-                <span className="text-white/30 text-[1.3vh] flex items-center gap-1.5 font-bold">
+                <span className="text-white/90 text-[1.5vh] flex items-center gap-1.5 font-bold">
                   <FaCalendarDays /> Pekan {weekNum}
                 </span>
               </div>
               <h3 className="text-[3.5vh] font-bold text-white leading-tight mb-4">{ahadContent.judul}</h3>
               {ahadContent.pemateri && (
-                <div className="flex items-center gap-3 text-[1.9vh] text-white/60 font-medium italic border-t border-white/5 pt-4">
+                <div className="flex items-center gap-3 text-[2.5vh] text-white/90 font-medium italic border-t border-white/5 pt-4">
                   <FaChalkboardUser className="text-[#FAED21]/50" /> {ahadContent.pemateri}
                 </div>
               )}
