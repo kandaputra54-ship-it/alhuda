@@ -55,7 +55,12 @@ export default function Home() {
     const currentTime = now.getTime();
     const schedules = [
       { label: 'Subuh', time: prayerTimes.Subuh, img: '/subuh.png', iqomah: 14 },
-      { label: 'Dzuhur', time: prayerTimes.Dzuhur, img: '/dzuhur.png', iqomah: 13 },
+      {
+        label: 'Dzuhur',
+        time: prayerTimes.Dzuhur,
+        img: dayName === 'Jumat' ? '/jumat.png' : '/dzuhur.png',
+        iqomah: 13
+      },
       { label: 'Ashar', time: prayerTimes.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: prayerTimes.Maghrib, img: '/maghrib.png', iqomah: 10 },
       { label: 'Isya', time: prayerTimes.Isya, img: '/isya.png', iqomah: 10 },
@@ -100,7 +105,7 @@ export default function Home() {
     // --- LOGIKA ROTASI 2 MENIT (FIXED) ---
     // Hitung total menit hari ini.
     const totalSeconds = Math.floor(now.getTime() / 1000);
-    const rotationView = Math.floor(totalSeconds / 120 ) % 2 === 0 ? 'PRAYER_MAIN' : 'KAJIAN_MAIN';
+    const rotationView = Math.floor(totalSeconds / 120) % 2 === 0 ? 'PRAYER_MAIN' : 'KAJIAN_MAIN';
     return { type: rotationView };
     // =========================================================================
   };
