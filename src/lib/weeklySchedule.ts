@@ -63,7 +63,7 @@ export const weeklySchedule: Record<string, DaySchedule> = {
   },
   Jumat: {
     subuh: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "Azan Salaeh" },
-    jumat: { khatib: "Drs.Abdul Syukur", imam: "M. Syamsudin", muadzin: "Muadzin Jumat" },
+    jumat: { khatib: "Suratno Utomo S.Pd.I", imam: "M. Syamsudin", muadzin: "Muadzin Jumat" },
     ashar: { utama: "M. Syamsudin ", badal: "Azan Saleh", muadzin: "Satria" },
     maghrib: { utama: "Tedi Koswara", badal: "Azan Saleh", muadzin: "Azan Saleh" },
     isya: { utama: "Syamsudin", badal: "Azan Saleh", muadzin: "Azan Saleh" },
@@ -74,7 +74,7 @@ export const weeklySchedule: Record<string, DaySchedule> = {
     dzuhur: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Remaja " },
     ashar: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Reza" },
     maghrib: { utama: "Syakir Abdullah", badal: "Azan Saleh", muadzin: "Tedi Koswara" },
-    isya: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "Tedi Koswara" },
+    isya: { utama: "Galuh Yogaswara", badal: "Tedi Koswara", muadzin: "Tedi Koswara" },
   
   },
   Minggu: {
