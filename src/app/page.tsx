@@ -1,4 +1,5 @@
 "use client";
+// --- IMPORTS --- MASJID AL-HUDA MUHAMMADIYAH RAMBUTAN
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { El_Messiri } from 'next/font/google';
 import { getPrayerTimes } from '@/lib/prayerTimes';
