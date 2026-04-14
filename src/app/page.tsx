@@ -1,6 +1,6 @@
 "use client";
 // --- IMPORTS --- MASJID AL-HUDA MUHAMMADIYAH RAMBUTAN
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { El_Messiri } from 'next/font/google';
 import { getPrayerTimes } from '@/lib/prayerTimes';
 import { weeklySchedule } from '@/lib/weeklySchedule';
@@ -15,7 +15,7 @@ import { AdzanOverlay } from '@/components/AdzanOverlay';
 import { IqomahOverlay } from '@/components/IqomahOverlay';
 import { ImamOverlay } from '@/components/ImamOverlay';
 import { JumatOverlay } from '@/components/JumatOverlay';
-import { KajianView } from '@/components/KajianView'; // Import Komponen Kajian
+import { KajianView } from '@/components/KajianView';
 
 const elMessiri = El_Messiri({
   subsets: ['latin'],
@@ -32,7 +32,12 @@ type ActiveState =
   | { type: 'PRAYER_MAIN' }
   | { type: 'KAJIAN_MAIN' };
 
-export default function Home() {
+// =============================================================================
+// KUNCI OPTIMASI: Semua logika yang butuh `now` (update tiap detik) dikurung
+// di dalam komponen ini. MarqueeFooter ada di LUAR komponen ini, sehingga
+// tidak pernah ikut re-render meski timer jalan terus.
+// =============================================================================
+const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void }) => {
   const [now, setNow] = useState(new Date());
   const [audioEnabled, setAudioEnabled] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -51,7 +56,6 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // --- LOGIKA UTAMA (STATE-DRIVEN) ---
   const getActiveView = (): ActiveState => {
     const currentTime = now.getTime();
     const schedules = [
@@ -102,13 +106,9 @@ export default function Home() {
       }
     }
 
-    // =========================================================================
-    // --- LOGIKA ROTASI 2 MENIT (FIXED) ---
-    // Hitung total menit hari ini.
     const totalSeconds = Math.floor(now.getTime() / 1000);
     const rotationView = Math.floor(totalSeconds / 120) % 2 === 0 ? 'PRAYER_MAIN' : 'KAJIAN_MAIN';
     return { type: rotationView };
-    // =========================================================================
   };
 
   const activeState = getActiveView();
@@ -157,24 +157,15 @@ export default function Home() {
   const nextPrayer = displaySchedules.find((p: any) => isAfter(p.time, now));
 
   return (
-    <main
-      onClick={unlockAudio}
-      className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d]`}
-    >
-      <BackgroundGradient />
+    <div onClick={unlockAudio} className="contents">
       {renderOverlay()}
 
       <div className="relative z-10 flex flex-col h-full justify-between">
         <Header now={now} />
 
-        {/* ========================================================================= */}
-        {/* --- MAIN CONTENT AREA (Rotasi dihandle di sini) --- */}
-        {/* ========================================================================= */}
         {activeState.type === 'KAJIAN_MAIN' ? (
-          // Tampilan Kajian (Menit Ganjil 2-menitan)
           <KajianView />
         ) : (
-          // Tampilan Prayer Card (Menit Genap 2-menitan)
           <div className="grid grid-cols-6 gap-5 my-6 animate-in fade-in duration-700">
             {displaySchedules.map((item: any) => (
               <PrayerCard
@@ -190,9 +181,9 @@ export default function Home() {
             ))}
           </div>
         )}
-        {/* ========================================================================= */}
 
-        <MarqueeFooter />
+        {/* MarqueeFooter TIDAK ada di sini — ada di parent agar tidak ikut re-render */}
+        <div className="h-20" /> {/* Spacer pengganti MarqueeFooter agar layout tidak geser */}
       </div>
 
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-30">
@@ -200,6 +191,30 @@ export default function Home() {
         <span className="text-[10px] font-bold uppercase tracking-tighter">
           {audioEnabled ? 'Sound On' : 'Click Screen to Unlock Sound'}
         </span>
+      </div>
+    </div>
+  );
+});
+
+ClockDrivenContent.displayName = 'ClockDrivenContent';
+
+// =============================================================================
+// ROOT COMPONENT: Statis, tidak punya state. MarqueeFooter hidup di sini,
+// jadi tidak pernah tersentuh re-render dari timer.
+// =============================================================================
+export default function Home() {
+  return (
+    <main
+      className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d]`}
+    >
+      <BackgroundGradient />
+
+      {/* ClockDrivenContent mengandung semua logika timer & prayer */}
+      <ClockDrivenContent onAudioUnlock={() => {}} />
+
+      {/* MarqueeFooter di-render SEKALI dan tidak pernah re-render lagi */}
+      <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-10 pointer-events-none">
+        <MarqueeFooter />
       </div>
     </main>
   );

@@ -39,26 +39,26 @@ export const weeklySchedule: Record<string, DaySchedule> = {
   },
  Selasa: {
     subuh: { utama: "Syakir Abdullah", badal: "Kanda Putra", muadzin: "Ardanel" },
-    dzuhur: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Rusman" },
-    ashar: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Icam" },
-    maghrib: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Ardanel" },
-    isya: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Ardanel" },
+    dzuhur: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: "Rusman" },
+    ashar: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: "Icam" },
+    maghrib: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: "Ardanel" },
+    isya: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: "Ardanel" },
  
   },
   Rabu: {
     subuh: { utama: "Nashrullah", badal: "Syamsudin", muadzin: "Nuryaman" },
     dzuhur: { utama: "Tedi Koswara", badal: "Kanda Putra", muadzin: "Rusman" },
     ashar: { utama: "Tedi Koswara", badal: "Kanda Putra", muadzin: "Rafki" },
-    maghrib: { utama: "Kanda Putra", badal: "Dewa Alfian", muadzin: "Nuryaman" },
-    isya: { utama: "Tedi Koswara", badal: "Azan Saleh", muadzin: "Nuryaman" },
+    maghrib: { utama: "Dewa Alfian", badal: "Kanda Putra", muadzin: "Nuryaman" },
+    isya: { utama: "Dewa Alfian", badal: "Kanda Putra", muadzin: "Nuryaman" },
    
   },
   Kamis: {
     subuh: { utama: "Syakir Abdullah", badal: "Azan Saleh", muadzin: "Kanda Putra" },
-    dzuhur: { utama: "Azan Saleh", badal: "Kanda Putra", muadzin: "Rusman" },
-    ashar: { utama: "Azan Saleh", badal: "Kanda Putra", muadzin: "Lukman" },
-    maghrib: { utama: "Azan Saleh", badal: "Kanda Putra", muadzin: "Kanda Putra" },
-    isya: { utama: "Azan Saleh", badal: "Kanda Putra", muadzin: "Kanda Putra" },
+    dzuhur: { utama: "Kanda Putra ", badal: "Azan Saleh", muadzin: "Rusman" },
+    ashar: { utama: "Kanda Putra ", badal: "Azan Saleh", muadzin: "Lukman" },
+    maghrib: { utama: "Kanda Putra ", badal: "Azan Saleh", muadzin: "Kanda Putra" },
+    isya: { utama: "Kanda Putra ", badal: "Azan Saleh", muadzin: "Kanda Putra" },
    
   },
   Jumat: {
