@@ -64,7 +64,7 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
         label: 'Dzuhur',
         time: prayerTimes.Dzuhur,
         img: dayName === 'Jumat' ? '/jumat.png' : '/dzuhur.png',
-        iqomah: 13
+        iqomah: dayName === 'Jumat' ? 25 : 13 // 25 menit jika Jumat, selain itu 13 menit
       },
       { label: 'Ashar', time: prayerTimes.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: prayerTimes.Maghrib, img: '/maghrib.png', iqomah: 10 },
@@ -210,7 +210,7 @@ export default function Home() {
       <BackgroundGradient />
 
       {/* ClockDrivenContent mengandung semua logika timer & prayer */}
-      <ClockDrivenContent onAudioUnlock={() => {}} />
+      <ClockDrivenContent onAudioUnlock={() => { }} />
 
       {/* MarqueeFooter di-render SEKALI dan tidak pernah re-render lagi */}
       <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-10 pointer-events-none">
