@@ -7,27 +7,57 @@ export const MarqueeFooter = memo(() => {
   return (
     <div className="h-20 bg-black/40 backdrop-blur-xl rounded-[30px] flex items-center overflow-hidden border border-white/10 relative transform-gpu">
       <Marquee 
-        speed={45}           // Kecepatan ideal untuk display TV
+        speed={45}
         gradient={false} 
-        pauseOnHover={false} // Dimatikan karena di TV jarang pakai mouse/hover
+        pauseOnHover={false}
         className="overflow-hidden"
       >
-        <span className="mx-20 text-[#FAED21] font-bold italic text-5xl">
-          "Sesungguhnya Aku ini adalah Allah, tidak ada Tuhan (yang hak) selain Aku, maka sembahlah Aku dan dirikanlah shalat untuk mengingat Aku." (QS. Thaha: 14)
+        {/* Ayat-ayat Al-Qur'an */}
+        
+
+        {/* Separator */}
+        <span className="mx-12 text-emerald-400/50 text-4xl">❖</span>
+
+        {/* Info Qurban: Jadwal */}
+        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light">
+          📅 Pelaksanaan Idul Adha 1447H:
         </span>
-        <span className="text-white/30 text-4xl">✦</span>
-        <span className="mx-20 text-white text-5xl">
-          "Dan laksanakanlah shalat, tunaikanlah zakat, dan rukuklah beserta orang-orang yang rukuk." (QS. Al-Baqarah: 43)
+        <span className="mx-6 text-yellow-400 font-bold text-5xl uppercase">
+          Rabu, 27 Mei 2026
         </span>
-        <span className="text-white/30 text-4xl">✦</span>
-        <span className="mx-20 text-orange-200 font-semibold italic text-5xl">
-          "Sesungguhnya yang memakmurkan masjid-masjid Allah hanyalah orang-orang yang beriman kepada Allah..." (QS. At-Taubah: 18)
+        <span className="text-white/30 text-4xl mx-6">✦</span>
+
+        {/* Info Qurban: Hak Sapi */}
+        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light">
+          🐄 Hak Pengqurban Sapi:
         </span>
-        <span className="text-white/30 text-4xl">✦</span>
+        <span className="mx-6 text-emerald-300 font-semibold text-5xl">
+          Daging 3 KG + 5 Kantong
+        </span>
+        <span className="text-white/30 text-4xl mx-6">✦</span>
+
+        {/* Info Qurban: Hak Kambing */}
+        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light">
+          🐑 Hak Pengqurban Kambing:
+        </span>
+        <span className="mx-6 text-emerald-300 font-semibold text-5xl">
+          Paha Belakang Kanan + 1 Kantong
+        </span>
+        <span className="text-white/30 text-4xl mx-6">✦</span>
+
+        {/* Info Qurban: Kontak */}
+        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light">
+          📞 Informasi & Pendaftaran:
+        </span>
+        <span className="mx-6 text-yellow-400 font-bold text-5xl uppercase">
+          Hubungi DKM Al-Huda
+        </span>
+
+        {/* Separator sebelum kembali ke ayat */}
+        <span className="mx-12 text-emerald-400/50 text-4xl">❖</span>
       </Marquee>
     </div>
   );
 });
 
-// Memberikan nama display agar mudah di-debug di React DevTools
 MarqueeFooter.displayName = "MarqueeFooter";
