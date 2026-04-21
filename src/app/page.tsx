@@ -16,6 +16,7 @@ import { IqomahOverlay } from '@/components/IqomahOverlay';
 import { ImamOverlay } from '@/components/ImamOverlay';
 import { JumatOverlay } from '@/components/JumatOverlay';
 import { KajianView } from '@/components/KajianView';
+import { QurbanView } from '@/components/QurbanView';
 
 const elMessiri = El_Messiri({
   subsets: ['latin'],
@@ -23,20 +24,16 @@ const elMessiri = El_Messiri({
   variable: '--font-el-messiri',
 });
 
-// --- TYPE DEFINITION (Type-Safe) ---
+// --- TYPE DEFINITION ---
 type ActiveState =
   | { type: 'ADZAN'; data: { image: string; label: string } }
   | { type: 'IQOMAH'; data: { label: string; duration: number } }
   | { type: 'IMAM'; data: { label: string; utama: string; badal: string } }
   | { type: 'JUMAT'; data: { khatib: string; imam: string } }
   | { type: 'PRAYER_MAIN' }
-  | { type: 'KAJIAN_MAIN' };
+  | { type: 'KAJIAN_MAIN' }
+  | { type: 'QURBAN_MAIN' };
 
-// =============================================================================
-// KUNCI OPTIMASI: Semua logika yang butuh `now` (update tiap detik) dikurung
-// di dalam komponen ini. MarqueeFooter ada di LUAR komponen ini, sehingga
-// tidak pernah ikut re-render meski timer jalan terus.
-// =============================================================================
 const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void }) => {
   const [now, setNow] = useState(new Date());
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -64,7 +61,7 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
         label: 'Dzuhur',
         time: prayerTimes.Dzuhur,
         img: dayName === 'Jumat' ? '/jumat.png' : '/dzuhur.png',
-        iqomah: dayName === 'Jumat' ? 25 : 13 // 25 menit jika Jumat, selain itu 13 menit
+        iqomah: dayName === 'Jumat' ? 25 : 13
       },
       { label: 'Ashar', time: prayerTimes.Ashar, img: '/ashar.png', iqomah: 10 },
       { label: 'Maghrib', time: prayerTimes.Maghrib, img: '/maghrib.png', iqomah: 10 },
@@ -106,9 +103,13 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
       }
     }
 
+    // ROTASI 1 MENIT (Prayer -> Kajian -> Qurban)
     const totalSeconds = Math.floor(now.getTime() / 1000);
-    const rotationView = Math.floor(totalSeconds / 120) % 2 === 0 ? 'PRAYER_MAIN' : 'KAJIAN_MAIN';
-    return { type: rotationView };
+    const rotationIndex = Math.floor(totalSeconds / 60) % 3;
+
+    if (rotationIndex === 0) return { type: 'PRAYER_MAIN' };
+    if (rotationIndex === 1) return { type: 'KAJIAN_MAIN' };
+    return { type: 'QURBAN_MAIN' };
   };
 
   const activeState = getActiveView();
@@ -163,8 +164,11 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
       <div className="relative z-10 flex flex-col h-full justify-between">
         <Header now={now} />
 
+        {/* LOGIKA RENDERING UTAMA */}
         {activeState.type === 'KAJIAN_MAIN' ? (
           <KajianView />
+        ) : activeState.type === 'QURBAN_MAIN' ? (
+          <QurbanView />
         ) : (
           <div className="grid grid-cols-6 gap-5 my-6 animate-in fade-in duration-700">
             {displaySchedules.map((item: any) => (
@@ -182,8 +186,7 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
           </div>
         )}
 
-        {/* MarqueeFooter TIDAK ada di sini — ada di parent agar tidak ikut re-render */}
-        <div className="h-20" /> {/* Spacer pengganti MarqueeFooter agar layout tidak geser */}
+        <div className="h-20" />
       </div>
 
       <div className="fixed bottom-6 right-6 z-[200] flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 opacity-30">
@@ -198,21 +201,11 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
 
 ClockDrivenContent.displayName = 'ClockDrivenContent';
 
-// =============================================================================
-// ROOT COMPONENT: Statis, tidak punya state. MarqueeFooter hidup di sini,
-// jadi tidak pernah tersentuh re-render dari timer.
-// =============================================================================
 export default function Home() {
   return (
-    <main
-      className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d]`}
-    >
+    <main className={`${elMessiri.variable} font-[family-name:var(--font-el-messiri)] h-screen w-full flex flex-col justify-between p-10 select-none overflow-hidden text-white relative bg-[#1a204d]`}>
       <BackgroundGradient />
-
-      {/* ClockDrivenContent mengandung semua logika timer & prayer */}
       <ClockDrivenContent onAudioUnlock={() => { }} />
-
-      {/* MarqueeFooter di-render SEKALI dan tidak pernah re-render lagi */}
       <div className="fixed bottom-0 left-0 right-0 z-10 px-10 pb-10 pointer-events-none">
         <MarqueeFooter />
       </div>
