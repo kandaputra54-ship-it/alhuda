@@ -30,8 +30,8 @@ export const QurbanView = ({
         <p className="uppercase tracking-[0.4em] text-emerald-400 text-2xl font-light">Nilai Qurban per jiwa</p>
 
         <div className="flex items-baseline gap-3">
-          <span className="text-white/40 text-4xl font-light">Rp</span>
-          <span className="text-[8rem] font-black leading-none text-white">{formatRupiah(harga)}</span>
+          <span className="text-white/40 text-6xl font-light">Rp</span>
+          <span className="text-[5.5rem] font-black leading-none text-white">{formatRupiah(harga)}</span>
         </div>
 
         <div className="flex items-center gap-3 bg-red-600/20 border border-red-500/30 px-8 py-3 rounded-xl">
