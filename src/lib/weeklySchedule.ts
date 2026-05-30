@@ -98,7 +98,7 @@ export const weeklySchedule: Record<string, DaySchedule> = {
       muadzin: "Azan Salaeh",
     },
     jumat: {
-      khatib: "Ishaq Ismail",
+      khatib: "Drs.H.M Shodiq",
       imam: "M. Syamsudin",
       muadzin: "Muadzin Jumat",
     },
