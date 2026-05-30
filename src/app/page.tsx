@@ -16,7 +16,7 @@ import { IqomahOverlay } from '@/components/IqomahOverlay';
 import { ImamOverlay } from '@/components/ImamOverlay';
 import { JumatOverlay } from '@/components/JumatOverlay';
 import { KajianView } from '@/components/KajianView';
-import { QurbanView } from '@/components/QurbanView';
+
 
 const elMessiri = El_Messiri({
   subsets: ['latin'],
@@ -31,8 +31,7 @@ type ActiveState =
   | { type: 'IMAM'; data: { label: string; utama: string; badal: string } }
   | { type: 'JUMAT'; data: { khatib: string; imam: string } }
   | { type: 'PRAYER_MAIN' }
-  | { type: 'KAJIAN_MAIN' }
-  | { type: 'QURBAN_MAIN' };
+  | { type: 'KAJIAN_MAIN' };
 
 const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void }) => {
   const [now, setNow] = useState(new Date());
@@ -103,13 +102,13 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
       }
     }
 
-    // ROTASI 1 MENIT (Prayer -> Kajian -> Qurban)
+
+    // ROTASI 1 MENIT (Prayer -> Kajian)
     const totalSeconds = Math.floor(now.getTime() / 1000);
-    const rotationIndex = Math.floor(totalSeconds / 60) % 3;
+    const rotationIndex = Math.floor(totalSeconds / 60) % 2; // Diubah dari % 3 menjadi % 2
 
     if (rotationIndex === 0) return { type: 'PRAYER_MAIN' };
-    if (rotationIndex === 1) return { type: 'KAJIAN_MAIN' };
-    return { type: 'QURBAN_MAIN' };
+    return { type: 'KAJIAN_MAIN' }; // Langsung return Kajian jika bukan 0
   };
 
   const activeState = getActiveView();
@@ -167,8 +166,6 @@ const ClockDrivenContent = memo(({ onAudioUnlock }: { onAudioUnlock: () => void 
         {/* LOGIKA RENDERING UTAMA */}
         {activeState.type === 'KAJIAN_MAIN' ? (
           <KajianView />
-        ) : activeState.type === 'QURBAN_MAIN' ? (
-          <QurbanView />
         ) : (
           <div className="grid grid-cols-6 gap-5 my-6 animate-in fade-in duration-700">
             {displaySchedules.map((item: any) => (
