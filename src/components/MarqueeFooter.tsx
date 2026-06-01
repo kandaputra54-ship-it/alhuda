@@ -1,66 +1,59 @@
 import React, { memo } from "react";
 import Marquee from "react-fast-marquee";
-import { IconCalendar,  IconPhone } from "@tabler/icons-react";
-import { Icon } from "@iconify/react";
 
-// Menggunakan React.memo agar komponen tidak render ulang setiap detik 
-// meskipun Parent (page.tsx) update state 'now' terus-menerus.
 export const MarqueeFooter = memo(() => {
   return (
     <div className="h-20 bg-black/40 backdrop-blur-xl rounded-[30px] flex items-center overflow-hidden border border-white/10 relative transform-gpu">
       <Marquee 
-        speed={45}
+        speed={30}
         gradient={false} 
-        pauseOnHover={false}
+        pauseOnHover={true}
         className="overflow-hidden"
       >
-        {/* Ayat-ayat Al-Qur'an */}
-        
+        {/* Ayat 1: Pencegah Keji & Mungkar */}
+        <span className="mx-6 text-emerald-300 font-medium text-4xl font-serif">
+          إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنْكَرِ
+        </span>
+        <span className="mx-6 text-white/80 text-4xl font-light">
+          "Sesungguhnya shalat itu mencegah dari (perbuatan) keji dan mungkar." (QS. Al-Ankabut: 45)
+        </span>
+        <span className="text-white/30 text-4xl mx-12">✦</span>
 
-        {/* Separator */}
-        <span className="mx-12 text-emerald-400/50 text-4xl">❖</span>
+        {/* Hadits 1: Shalat Berjamaah */}
+        <span className="mx-6 text-emerald-300 font-medium text-4xl font-serif">
+          صَلَاةُ الْجَمَاعَةِ أَفْضَلُ مِنْ صَلَاةِ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً
+        </span>
+        <span className="mx-6 text-white/80 text-4xl font-light">
+          "Shalat berjamaah lebih utama daripada shalat sendirian seratus dua puluh tujuh derajat." (HR. Muslim No. 650)
+        </span>
+        <span className="text-white/30 text-4xl mx-12">✦</span>
 
-        {/* Info Qurban: Jadwal */}
-        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light flex items-center gap-3">
-          <IconCalendar className="w-8 h-8 text-emerald-400" strokeWidth={1.5} />
-          Pelaksanaan Idul Adha 1447H:
+        {/* Ayat 2: Penolong Sabar & Shalat */}
+        <span className="mx-6 text-emerald-300 font-medium text-4xl font-serif">
+          وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ
         </span>
-        <span className="mx-6 text-yellow-400 font-bold text-5xl uppercase">
-          Rabu, 27 Mei 2026
+        <span className="mx-6 text-white/80 text-4xl font-light">
+          "Jadikanlah sabar dan shalat sebagai penolongmu. Dan sesungguhnya yang demikian itu sungguh berat, kecuali bagi orang-orang yang khusyuk." (QS. Al-Baqarah: 45)
         </span>
-        <span className="text-white/30 text-4xl mx-6">✦</span>
+        <span className="text-white/30 text-4xl mx-12">✦</span>
 
-        {/* Info Qurban: Hak Sapi */}
-        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light flex items-center gap-3">
-          <Icon icon="noto:cow" className="w-8 h-8" />
-          Hak Pengqurban Sapi:
+        {/* Hadits 2: Shalat adalah Cahaya */}
+        <span className="mx-6 text-emerald-300 font-medium text-4xl font-serif">
+          وَالصَّلَاةُ نُورٌ
         </span>
-        <span className="mx-6 text-emerald-300 font-semibold text-5xl">
-          Daging 3 KG + 5 Kantong
+        <span className="mx-6 text-white/80 text-4xl font-light">
+          "Dan shalat itu adalah cahaya." (HR. Muslim No. 223)
         </span>
-        <span className="text-white/30 text-4xl mx-6">✦</span>
+        <span className="text-white/30 text-4xl mx-12">✦</span>
 
-        {/* Info Qurban: Hak Kambing */}
-        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light flex items-center gap-3">
-          <Icon icon="noto:goat" className="w-8 h-8" />
-          Hak Pengqurban Kambing:
+        {/* Hadits 3: Batas Kekafiran adalah Meninggalkan Shalat */}
+        <span className="mx-6 text-emerald-300 font-medium text-4xl font-serif">
+          إِنَّ بَيْنَ الرَّجُلِ وَبَيْنَ الشِّرْكِ وَالْكُفْرِ تَرْكُ الصَّلَاةِ
         </span>
-        <span className="mx-6 text-emerald-300 font-semibold text-5xl">
-          Paha Belakang Kanan + 1 Kantong
+        <span className="mx-6 text-white/80 text-4xl font-light">
+          "Sesungguhnya batas antara seseorang dengan kesyirikan dan kekafiran adalah meninggalkan shalat." (HR. Muslim No. 82)
         </span>
-        <span className="text-white/30 text-4xl mx-6">✦</span>
-
-        {/* Info Qurban: Kontak */}
-        <span className="mx-6 text-white/60 text-4xl uppercase tracking-widest font-light flex items-center gap-3">
-          <IconPhone className="w-8 h-8 text-emerald-400" strokeWidth={1.5} />
-          Informasi & Pendaftaran:
-        </span>
-        <span className="mx-6 text-yellow-400 font-bold text-5xl uppercase">
-          Hubungi DKM Masjid  Al-Huda
-        </span>
-
-        {/* Separator sebelum kembali ke ayat */}
-        <span className="mx-12 text-emerald-400/50 text-4xl">❖</span>
+        <span className="text-white/30 text-4xl mx-12">✦</span>
       </Marquee>
     </div>
   );
