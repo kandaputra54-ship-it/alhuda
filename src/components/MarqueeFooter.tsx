@@ -24,7 +24,7 @@ export const MarqueeFooter = memo(() => {
           صَلَاةُ الْجَمَاعَةِ أَفْضَلُ مِنْ صَلَاةِ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً
         </span>
         <span className="mx-6 text-white/80 text-4xl font-light">
-          "Shalat berjamaah lebih utama daripada shalat sendirian seratus dua puluh tujuh derajat." (HR. Muslim No. 650)
+          "Shalat berjamaah lebih utama daripada shalat sendirian  dua puluh tujuh derajat." (HR. Muslim No. 650)
         </span>
         <span className="text-white/30 text-4xl mx-12">✦</span>
 
