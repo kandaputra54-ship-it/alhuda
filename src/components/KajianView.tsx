@@ -17,7 +17,7 @@ export const KajianView = () => {
 
   // Data Ahad (Logic Pekanan)
   let ahadContent = {
-    judul: 'Tanya Jawab Agama Tarjih Muhammadiyah',
+    judul: 'Himpunan Putusan Tarjih Muhammadiyah',
     pemateri: null as string | null
   };
 
