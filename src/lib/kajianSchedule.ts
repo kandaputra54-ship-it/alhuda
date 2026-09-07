@@ -11,7 +11,7 @@ export const kajianRutin = [
   { hari: 'Selasa', judul: 'Kitab Riyadhus Shalihin', waktu: "Ba'da Maghrib" },
   { hari: 'Rabu', judul: 'Al-Qur\'an dan Terjemahan', waktu: "Ba'da Maghrib" },
   { hari: 'Kamis', judul: 'Al-Qur\'an dan Terjemahan', waktu: "Ba'da Maghrib" },
-  { hari: 'Jumat', judul: 'Kitab Riyadhus Shalihin', waktu: "Ba'da Maghrib" },
+  { hari: 'Jumat', judul: 'Tarjih Tanya Jawab Agama', waktu: "Ba'da Maghrib" },
   { hari: 'Sabtu', judul: 'Murojaah Al-Qur\'an ', waktu: "Ba'da Maghrib" },
 ];
 
