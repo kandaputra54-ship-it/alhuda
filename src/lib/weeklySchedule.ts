@@ -40,13 +40,13 @@ export const weeklySchedule: Record<string, DaySchedule> = {
   },
   Selasa: {
     subuh: { utama: "Syakir Abdullah", badal: "Kanda Putra", muadzin: "Ardanel", },
-    dzuhur: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Rusman" },
-    ashar: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Icam" },
-    maghrib: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Ardanel", },
-    isya: { utama: "Kanda Putra", badal: "Tedi Koswara", muadzin: "Ardanel" },
+    dzuhur: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Rusman" },
+    ashar: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Icam" },
+    maghrib: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Ardanel", },
+    isya: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Ardanel" },
   },
   Rabu: {
-    subuh: { utama: "Nashrullah", badal: "M.Syamsudin", muadzin: "Nuryaman" },
+    subuh: { utama: "Nashrullah", badal: "Tedi Koswara", muadzin: "Nuryaman" },
     dzuhur: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Rusman" },
     ashar: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Rafki" },
     maghrib: { utama: "Kanda Putra", badal: "Azan Saleh", muadzin: "Nuryaman", },
@@ -74,10 +74,10 @@ export const weeklySchedule: Record<string, DaySchedule> = {
     isya: { utama: "Syakir Abdullah", badal: "Azan Saleh", muadzin: "Tedi Koswara", },
   },
   Minggu: {
-    subuh: { utama: "Syakir Abdullah", badal: "Azan Saleh", muadzin: "M. Syamsudin", },
+    subuh: { utama: "Syakir Abdullah", badal: "Azan Saleh", muadzin: "Remaja", },
     dzuhur: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: " Remaja" },
     ashar: { utama: "Azan Saleh", badal: "Tedi Koswara", muadzin: "Ipan" },
-    maghrib: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "M. Syamsudin", },
-    isya: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "M. Syamsudin", },
+    maghrib: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "Remaja", },
+    isya: { utama: "Syakir Abdullah", badal: "Tedi Koswara", muadzin: "Remaja", },
   },
 };
